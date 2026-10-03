@@ -1,0 +1,27 @@
+{
+  "name": "marketing-kit",
+  "displayName": "Marketing Kit",
+  "version": "1.4.0",
+  "description": "Ask Claude about your ads, analytics and subscriptions: Meta Ads, Facebook Pages, Instagram, TikTok Ads, Google Ads, GA4, Search Console, AppsFlyer, RevenueCat and App Store, through the Marketing Kit connector.",
+  "author": {
+    "name": "VALAS OÜ – podružnica v Sloveniji",
+    "url": "https://marketing-kit.app"
+  },
+  "homepage": "https://marketing-kit.app",
+  "repository": "https://github.com/arey325/marketing-kit-plugin",
+  "license": "MIT",
+  "keywords": [
+    "marketing",
+    "advertising",
+    "analytics",
+    "meta-ads",
+    "tiktok-ads",
+    "google-ads",
+    "ga4",
+    "search-console",
+    "appsflyer",
+    "revenuecat",
+    "app-store",
+    "instagram"
+  ]
+}

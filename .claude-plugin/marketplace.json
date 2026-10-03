@@ -1,0 +1,18 @@
+{
+  "name": "marketing-kit",
+  "owner": {
+    "name": "VALAS OÜ – podružnica v Sloveniji",
+    "email": "connect@valas.team"
+  },
+  "metadata": {
+    "description": "Marketing Kit: ads, analytics and subscriptions in Claude."
+  },
+  "plugins": [
+    {
+      "name": "marketing-kit",
+      "source": "./",
+      "description": "Ask Claude about your ads, analytics and subscriptions: Meta Ads, Facebook Pages, Instagram, TikTok Ads, Google Ads, GA4, Search Console, AppsFlyer, RevenueCat and App Store, through the Marketing Kit connector.",
+      "version": "1.4.0"
+    }
+  ]
+}
