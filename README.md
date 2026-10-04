@@ -9,7 +9,24 @@ only reads, with two exceptions, each made only after you explicitly confirm
 the change: AppsFlyer OneLink links and integration settings, and turning on
 App Store Connect Analytics Reports.
 
-## Install (before the Claude directory listing)
+## Quickest way: a custom connector (no plugin needed)
+
+Do this on claude.ai in a web browser, not in the Claude Desktop app — the
+connector is saved to your Claude account and then works in Claude Desktop and
+on your phone too.
+
+1. Open https://claude.ai/customize/connectors → **Add custom connector**.
+   Name: `Marketing Kit`, URL: `https://marketing-kit.app/mcp`. Leave the OAuth
+   client fields empty and press **Add**.
+2. Press **Connect**, sign in with Google or Meta and press **Allow**. Then
+   authorize your sources on https://marketing-kit.app/connections.
+3. Start a new chat (https://claude.ai/new) and ask: “Check my Marketing Kit
+   status”.
+
+The plugin below is optional: it adds a reference skill next to the same
+connector.
+
+## Install the plugin (optional, before the Claude directory listing)
 
 Until the plugin is listed in the Claude directory, you add it from this
 repository, `arey325/marketing-kit-plugin`.
