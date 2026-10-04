@@ -3,7 +3,7 @@ name: marketing-kit
 description: |-
   Реклама, аналитика и подписки через коннектор Marketing Kit: расход, показы, клики, установки, события, кампании, конверсии, MRR, подписки, выручка, отзывы App Store. Применяй, когда речь о маркетинговых цифрах, даже если источник не назван («сколько потратили», «сколько установок», «что с кампанией», «установки в App Store», «продажи App Store Connect», «отзывы», «воронка App Store»). Работает через коннектор Marketing Kit (marketing-kit.app); инструменты: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_appsflyer (AppsFlyer), mk_appsflyer_write (правки OneLink), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect, свои приложения), mk_app_store_connect_write (включение Analytics Reports), mk_apple (App Store, публичные данные); начинай с mk_status.
 metadata:
-  version: "1.8.4"
+  version: "1.9.0"
   title: Marketing Kit
 ---
 
@@ -23,7 +23,7 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
 | `mk_google_ads` | Google Ads: отчёты GAQL и справочники кампаний, групп, объявлений, конверсионных действий |
 | `mk_ga4` | Google Analytics 4: события и поведение пользователей, воронки, пользователи и сессии, realtime, метаданные |
 | `mk_search_console` | Google Search Console: органический поиск Google — запросы, страницы, клики, показы, CTR, позиция; sitemaps; индексирование URL |
-| `mk_appsflyer` | AppsFlyer: установки и in-app события по источникам, сводные и сырые отчёты, OneLink |
+| `mk_appsflyer` | AppsFlyer: установки и in-app события по источникам, сводные и сырые отчёты, дубли покупок приложение ↔ RevenueCat (`purchase_dedup`), OneLink |
 | `mk_appsflyer_write` | AppsFlyer: изменение OneLink-ссылок и копия настроек интеграции (только после явного «да» пользователя) |
 | `mk_revenuecat` | RevenueCat: подписки — MRR, ARR, активные подписки и триалы, выручка, отток, конверсия триала, LTV, возвраты, продукты и offerings, подписка одного клиента |
 | `mk_app_store_connect` | App Store Connect: официальные данные Apple по своим приложениям — загрузки, повторные загрузки и обновления, выручка (proceeds), отчёты по подпискам и их события, воронка App Store (показы → просмотры страницы → загрузки), сессии, краши, отзывы с ответами, версии, эксперименты PPO; задержка D+1 |
@@ -88,7 +88,7 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
 
 В начале сессии, один раз, вызови `mk_status`.
 
-- **Версии.** Сверь `server.version` с версией этого скила (`1.8.4`).
+- **Версии.** Сверь `server.version` с версией этого скила (`1.9.0`).
   Сервер новее — скажи одной строкой, что плагин Marketing Kit обновится сам
   (скил подтягивается вместе с плагином), и работай дальше, не переспрашивай.
 - **Первый шаг.** Если в ответе `mk_status` есть `next_step` — скажи пользователю эту
@@ -602,6 +602,79 @@ Google Cloud project») — настройка владельца сервиса
   пользователь явно попросил и объяснил зачем.
 - `onelink` — чтение одной короткой ссылки по `shortlink_id` (параметры
   кампании, `template_id`). Только GET.
+- `purchase_dedup` — дубли покупок между приложением (SDK) и
+  server-to-server событиями (RevenueCat → AppsFlyer) за период до 31 дня;
+  только счётчики, без id. Нужен модуль Raw Data. Рецепт — ниже.
+
+#### Дубли покупок AppsFlyer ↔ RevenueCat (ADR-0035)
+
+Когда спрашивают «покупки задваиваются», «в AppsFlyer выручки больше, чем в
+RevenueCat», «правильно ли настроены покупки», «надо ли ставить Purchase
+Connector»:
+
+1. `mk_appsflyer` `mode=purchase_dedup`, `args`: `app_id` (iOS и Android — по
+   вызову на каждое), `period` (до 31 дня, по умолчанию — последние 7–14
+   полных дней), часовой пояс пользователя. Свои имена событий в интеграции
+   RevenueCat — передай их в `event_names` (и в `first_purchase_events` для
+   первой покупки и старта триала).
+2. За те же дни и в том же поясе — `mk_revenuecat` `chart`: `trials_new`,
+   `actives_new` (новые платные) и `revenue` (транзакции), `resolution: day`.
+   Сравни с `by_day` режима: клиентских первых покупок (`sdk_first_purchase`)
+   должно быть около «новые триалы + новые платные без триала»; примерно
+   вдвое больше событий, чем у RevenueCat, — признак дубля. Источники считают
+   по-разному (атрибуция, пояс, песочница, задержка) — показывай оба числа.
+3. Ответ пользователю:
+   - **есть ли дубли, сколько, откуда** — из `duplicates` и `signals`:
+     `sdk_s2s` (одна покупка пришла из приложения и от RevenueCat; лишних
+     событий `extra_events`, лишней выручки `double_revenue_usd`), `sdk_sdk`
+     (два клиентских события: ручной `af_purchase` + `validateAndLog` или
+     Purchase Connector, либо restore), `s2s_s2s`. `allowed` — не дубль: это
+     событие RevenueCat с другим именем и без выручки, так и задумано;
+   - **схема «одно событие — один источник»** (`recommended_scheme`):
+
+     | Событие | Кто шлёт в AppsFlyer | Как |
+     |---|---|---|
+     | первая покупка, старт триала (пользователь в приложении) | приложение (SDK) | `validateAndLogInAppPurchase` на месте ручного вызова `af_purchase` |
+     | конверсия триала, продления | RevenueCat S2S | интеграция RevenueCat → AppsFlyer |
+     | отмены, возвраты | RevenueCat S2S | интеграция, отрицательная выручка |
+     | initial purchase и trial started в интеграции RevenueCat | никто | пустое имя события (не отправляется) или своё имя без выручки |
+
+   - **что поменять в коде приложения:** ручной `af_purchase` заменить на
+     `validateAndLogInAppPurchase` **в том же месте** — это замена события
+     на проверенное, а не второй источник; Purchase Connector рядом не
+     ставить (с `validateAndLog` — снова два клиентских события; AppsFlyer:
+     «одна интеграция на приложение»). Форма с `AFSDKPurchaseDetails`
+     (`productId`, `transactionId`, `purchaseType`) — с SDK 6.17.8; старая
+     форма с ценой и валютой устарела;
+   - **что поменять в RevenueCat:** Integrations → AppsFlyer — у Initial
+     Purchase и Trial Started очистить имя события или дать своё имя без
+     выручки; продления, конверсии, отмены, возвраты оставить.
+4. Подводные камни (скажи те, что относятся к ответу):
+   - клиентское событие двигает conversion value SKAdNetwork и быстро уходит
+     партнёрам для оптимизации; S2S-события в SKAN попадают, только если в
+     SKAN Conversion Studio включено «Record in-app events sent by
+     server-to-server API», и то лишь когда приложение открывается в окне
+     измерения;
+   - RevenueCat в своей инструкции советует убрать **всё** клиентское
+     логирование выручки — схема выше не противоречит этому, только если
+     первая покупка RevenueCat отключена или без выручки;
+   - старт триала с полной ценой в `af_purchase` завышает выручку
+     (`trial_logged_with_revenue`): на триале выручка 0;
+   - restore purchases не должен вызывать `validateAndLog` — иначе повтор
+     (`validated_twice`);
+   - TestFlight и песочница не проходят боевую проверку: для тестов —
+     `useReceiptValidationSandbox = true` только в тестовой сборке;
+   - без сети клиентское событие может не дойти — первая покупка тогда
+     видна только в RevenueCat;
+   - нет S2S-событий вовсе (`no_s2s_events`) — интеграция RevenueCat
+     выключена или не задан `$appsflyerId`: продлений в AppsFlyer нет.
+5. Без модуля Raw Data (ошибка «нет модуля Raw Data») — только косвенно:
+   `aggregate` `daily_report` (события `af_purchase`) против транзакций
+   `revenue` RevenueCat по дням; скажи, что разделить SDK и S2S без Raw Data
+   нельзя.
+
+Marketing Kit здесь только читает и советует: ни в AppsFlyer, ни в
+RevenueCat, ни в коде приложения он ничего не меняет.
 
 #### Запись (ADR-0005): только OneLink-ссылки и копия партнёрской интеграции
 
