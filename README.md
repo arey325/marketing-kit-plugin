@@ -9,6 +9,8 @@ only reads, with two exceptions, each made only after you explicitly confirm
 the change: AppsFlyer OneLink links and integration settings, and turning on
 App Store Connect Analytics Reports.
 
+Marketing Kit is free while in beta; pricing will be announced in advance.
+
 ## Quickest way: a custom connector (no plugin needed)
 
 Do this on claude.ai in a web browser, not in the Claude Desktop app — the
