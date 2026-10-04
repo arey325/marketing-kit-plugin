@@ -12,7 +12,7 @@
       "name": "marketing-kit",
       "source": "./",
       "description": "Ask Claude about your ads, analytics and subscriptions: Meta Ads, Facebook Pages, Instagram, TikTok Ads, Google Ads, GA4, Search Console, AppsFlyer, RevenueCat, App Store Connect and the public App Store, through the Marketing Kit connector.",
-      "version": "1.11.0"
+      "version": "1.12.0"
     }
   ]
 }
