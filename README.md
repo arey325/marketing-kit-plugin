@@ -3,9 +3,11 @@
 Marketing Kit lets Claude answer questions about your marketing numbers: ad
 spend, installs, events, campaigns, subscriptions and store reviews. It reads
 Meta Ads, Facebook Pages, Instagram, TikTok Ads, Google Ads, Google Analytics 4,
-Google Search Console, AppsFlyer, RevenueCat and the public App Store pages,
-and it only reads, with one exception: AppsFlyer OneLink links and integration
-settings can be changed, and only after you explicitly confirm each change.
+Google Search Console, AppsFlyer, RevenueCat, App Store Connect (your own
+apps, with a team key you save on the site) and the public App Store pages. It
+only reads, with two exceptions, each made only after you explicitly confirm
+the change: AppsFlyer OneLink links and integration settings, and turning on
+App Store Connect Analytics Reports.
 
 ## Install (before the Claude directory listing)
 
@@ -64,7 +66,7 @@ Without the plugin: **Customize → Connectors → Add custom connector** →
 2. Open the plugin's **Connectors** tab and press **Connect**.
 3. Sign in at marketing-kit.app with Google or Meta.
 4. On https://marketing-kit.app/connections authorize the sources you need and
-   save the AppsFlyer and RevenueCat keys there.
+   save the AppsFlyer, RevenueCat and App Store Connect keys there.
 5. Ask Claude. A good first message is: `check Marketing Kit status`.
 
 ## What is in the plugin and where your data goes
@@ -76,8 +78,9 @@ your disk.
 - Claude sends tool calls to `https://marketing-kit.app/mcp`: from Anthropic's
   servers when you use claude.ai, from your own machine when you use Claude Code.
 - The Marketing Kit server then calls the APIs of Meta, TikTok, Google (Ads,
-  Analytics, Search Console), AppsFlyer and RevenueCat, and Apple's public App
-  Store endpoints, on your behalf.
+  Analytics, Search Console), AppsFlyer, RevenueCat and Apple (App Store Connect
+  with a short-lived token the server signs from your saved key, and the public
+  App Store endpoints), on your behalf.
 - The server stores your account, your source tokens and keys (encrypted),
   temporary download files for large results (up to 24 hours) and an audit log
   of requests, without secrets.

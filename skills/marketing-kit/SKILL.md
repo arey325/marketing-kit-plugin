@@ -1,17 +1,17 @@
 ---
 name: marketing-kit
 description: |-
-  Реклама, аналитика и подписки через коннектор Marketing Kit: расход, показы, клики, установки, события, кампании, конверсии, MRR, подписки, выручка, отзывы App Store. Применяй, когда речь о маркетинговых цифрах, даже если источник не назван («сколько потратили», «сколько установок», «что с кампанией»). Работает через коннектор Marketing Kit (marketing-kit.app); инструменты: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_appsflyer (AppsFlyer), mk_appsflyer_write (правки OneLink), mk_revenuecat (RevenueCat), mk_apple (App Store); начинай с mk_status.
+  Реклама, аналитика и подписки через коннектор Marketing Kit: расход, показы, клики, установки, события, кампании, конверсии, MRR, подписки, выручка, отзывы App Store. Применяй, когда речь о маркетинговых цифрах, даже если источник не назван («сколько потратили», «сколько установок», «что с кампанией», «установки в App Store», «продажи App Store Connect», «отзывы», «воронка App Store»). Работает через коннектор Marketing Kit (marketing-kit.app); инструменты: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_appsflyer (AppsFlyer), mk_appsflyer_write (правки OneLink), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect, свои приложения), mk_app_store_connect_write (включение Analytics Reports), mk_apple (App Store, публичные данные); начинай с mk_status.
 metadata:
-  version: "1.5.0"
+  version: "1.6.0"
   title: Marketing Kit
 ---
 
 # Marketing Kit
 
 Реклама, аналитика и подписки через коннектор Marketing Kit (сервер marketing-kit.app):
-десять источников, по инструменту на каждый, `mk_appsflyer_write` для правок
-OneLink и `mk_status` для проверки подключений. Источник
+одиннадцать источников, по инструменту на каждый, `mk_appsflyer_write` для правок
+OneLink, `mk_app_store_connect_write` для включения Analytics Reports и `mk_status` для проверки подключений. Источник
 выбирай по имени инструмента — не ищи обход через соседний.
 
 | Инструмент | Для чего |
@@ -26,7 +26,9 @@ OneLink и `mk_status` для проверки подключений. Исто�
 | `mk_appsflyer` | AppsFlyer: установки и in-app события по источникам, сводные и сырые отчёты, OneLink |
 | `mk_appsflyer_write` | AppsFlyer: изменение OneLink-ссылок и копия настроек интеграции (только после явного «да» пользователя) |
 | `mk_revenuecat` | RevenueCat: подписки — MRR, ARR, активные подписки и триалы, выручка, отток, конверсия триала, LTV, возвраты, продукты и offerings, подписка одного клиента |
-| `mk_apple` | App Store: версия и дата релиза, рейтинг, отзывы, позиции в топах по странам |
+| `mk_app_store_connect` | App Store Connect: официальные данные Apple по своим приложениям — загрузки, повторные загрузки и обновления, выручка (proceeds), отчёты по подпискам и их события, воронка App Store (показы → просмотры страницы → загрузки), сессии, краши, отзывы с ответами, версии, эксперименты PPO; задержка D+1 |
+| `mk_app_store_connect_write` | App Store Connect: включение Analytics Reports (`analytics_enable`; только после явного «да» пользователя) |
+| `mk_apple` | App Store (публичные данные любого приложения, без ключа): версия и дата релиза, рейтинг, отзывы, позиции в топах по странам |
 | `mk_status` | Статус сервера: версии, кто вошёл, какие источники авторизованы, состояние API |
 
 Каждый инструмент принимает `{ mode, args }`: `mode` — режим источника,
@@ -49,10 +51,19 @@ OneLink и `mk_status` для проверки подключений. Исто�
 - **RevenueCat** (`mk_revenuecat`) — деньги подписок приложения: MRR, ARR,
   активные подписки и триалы, выручка (gross / proceeds), конверсия триала,
   отток, возвраты, LTV, когорты, что с подпиской конкретного пользователя.
-- **Google Ads, GA4, AppsFlyer, App Store** — как раньше: `mk_google_ads`
-  (реклама Google), `mk_ga4` (поведение в приложении и на сайте),
-  `mk_appsflyer` (установки и события по атрибуции), `mk_apple` (карточка
-  приложения в App Store).
+- **App Store Connect** (`mk_app_store_connect`) — официальные цифры Apple по
+  **своим** приложениям пользователя: загрузки, повторные загрузки и обновления
+  по странам и устройствам, выручка (proceeds), отчёты Apple по подпискам и их
+  события, воронка магазина (показы → просмотры страницы → загрузки), сессии,
+  краши, отзывы с ответами, версии, настройка Product Page Optimization.
+  Задержка D+1; Apple считает дни по тихоокеанскому времени.
+- **Apple, публичное** (`mk_apple`) — публичные данные **любого** приложения без
+  ключа: рейтинг, текущая версия, топы категорий, публичные отзывы, в том числе
+  у конкурентов.
+- **Google Ads, GA4, AppsFlyer** — как раньше: `mk_google_ads` (реклама
+  Google), `mk_ga4` (поведение в приложении и на сайте), `mk_appsflyer`
+  (атрибуция: установки и события по медиа-источникам и кампаниям,
+  неорганика против органики).
 
 Неоднозначность решай так: «реклама в инстаграме» — это `mk_meta`
 (разбивка `publisher_platform`), «охват аккаунта» или «охват постов в
@@ -62,11 +73,20 @@ OneLink и `mk_status` для проверки подключений. Исто�
 Search) — `mk_ga4`; платный поиск — `mk_google_ads`.
 «Подписки», «выручка приложения», «MRR», «триалы», «отток» — `mk_revenuecat`;
 «установки», «откуда пришли пользователи», «какая кампания дала установки» —
-`mk_appsflyer`; рейтинг, отзывы, версия в магазине — `mk_apple` (продаж и
-подписок в нём нет). RevenueCat не знает рекламных кампаний, AppsFlyer не знает
+`mk_appsflyer`; рейтинг, отзывы, версия в магазине у любого приложения —
+`mk_apple` (продаж и подписок в нём нет). «Установки в App Store», «продажи App
+Store Connect», «воронка App Store», «отзывы нашего приложения с ответами»,
+версии и PPO — `mk_app_store_connect`; подписки сразу по всем магазинам, MRR и
+отток почти в реальном времени — `mk_revenuecat`, а не App Store Connect.
+RevenueCat не знает рекламных кампаний, AppsFlyer не знает
 продлений — «окупилась ли кампания» требует обоих, подписывай, чья цифра.
+Когда цифры AppsFlyer, RevenueCat и App Store Connect не сходятся — это
+норма, объясни причину: окна атрибуции (AppsFlyer приписывает установку
+кампании, Apple считает все загрузки магазина), часовые пояса (Apple —
+тихоокеанское время, остальные — пояс аккаунта), разный подсчёт (SDK считает
+запуски приложения, магазин — загрузки и повторные загрузки).
 
-Рукопожатие `mk_status` перечисляет все десять источников. `mk_fb_pages` и
+Рукопожатие `mk_status` перечисляет все одиннадцать источников. `mk_fb_pages` и
 `mk_instagram` работают через подключение Meta: если у Meta в ответе
 `reauthorize: true` или `missing_scopes`, она подключена без разрешений для
 Pages и Instagram — скажи нажать «Authorize» у Meta ещё раз на
@@ -79,7 +99,7 @@ https://marketing-kit.app/connections (рекламное подключение
 
 В начале сессии, один раз, вызови `mk_status`.
 
-- **Версии.** Сверь `server.version` с версией этого скила (`1.5.0`).
+- **Версии.** Сверь `server.version` с версией этого скила (`1.6.0`).
   Сервер новее — скажи одной строкой, что плагин Marketing Kit обновится сам
   (скил подтягивается вместе с плагином), и работай дальше, не переспрашивай.
 - **Источники.** В `sources` у каждого источника — `authorized`. Нужный
@@ -141,6 +161,9 @@ https://marketing-kit.app/connections (рекламное подключение
   источника (нет ключей приложения): скажи об этом, не пытайся обойти.
 - `appsflyer_token_missing` — не сохранён токен AppsFlyer: см. раздел про
   ключи ниже.
+- `app_store_connect_key_missing` — не сохранён ключ App Store Connect (и
+  `app_store_connect_vendor_number_missing` — номер поставщика): см. раздел про
+  ключи ниже.
 - `revenuecat_key_missing` — не сохранён ключ RevenueCat: см. раздел про ключи
   ниже.
 - `invalid_args` — исправь аргументы по `message` и `mode=fields`, один раз.
@@ -155,10 +178,10 @@ https://marketing-kit.app/connections (рекламное подключение
 **Пошаговые инструкции** по каждому источнику — на сайте, ссылкой прямо на
 окно инструкции: `https://marketing-kit.app/connections#<источник>` —
 `ga4`, `google_ads`, `search_console`, `meta`, `fb_pages`, `instagram`,
-`tiktok`, `appsflyer`, `revenuecat`, `apple`. Когда пользователь не знает, как
+`tiktok`, `appsflyer`, `revenuecat`, `app_store_connect`, `apple`. Когда пользователь не знает, как
 подключить источник или что значит ошибка, дай эту ссылку.
 
-## Ключи: AppsFlyer, RevenueCat, Google Ads
+## Ключи: AppsFlyer, RevenueCat, App Store Connect, Google Ads
 
 Пользователь сохраняет их сам на странице https://marketing-kit.app/connections
 (сервер хранит их зашифрованными):
@@ -171,11 +194,18 @@ https://marketing-kit.app/connections (рекламное подключение
   Charts & Metrics / Customer Information / Project Configuration — Read).
   Ключи v1 и публичные ключи SDK не подходят. Инструкция:
   https://marketing-kit.app/connections#revenuecat.
+- **App Store Connect** — командный (team) ключ: Issuer ID, Key ID и файл
+  `.p8` (App Store Connect → Users and Access → Integrations → Team Keys) и
+  vendor number для продаж и подписок. Сохраняется только на
+  https://marketing-kit.app/connections#app-store-connect, файл `.p8` в чат не
+  присылают. Роль Admin покрывает всё; для чтения хватает Sales and Reports или
+  Finance (продажи, подписки, аналитика) и App Manager (приложения, отзывы,
+  версии); включение аналитики — только Admin.
 - **Google Ads** — ID менеджерского аккаунта (Login customer ID), если доступ к
   аккаунту идёт через MCC: https://marketing-kit.app/connections#google_ads.
 
 Не проси токен или ключ в чате: ответ `appsflyer_token_missing` /
-`revenuecat_key_missing` или `authorized: false` у `appsflyer` / `revenuecat` в
+`revenuecat_key_missing`, `app_store_connect_key_missing` или `authorized: false` у `appsflyer` / `revenuecat` / `app_store_connect` в
 `mk_status` — скажи, где его взять и куда сохранить (дай ссылку на инструкцию), и
 жди, пока пользователь сделает это сам.
 
@@ -266,6 +296,22 @@ https://marketing-kit.app/connections (рекламное подключение
 - `entitlements` — entitlements of the project with their products. Аргументы: project_id
 - `offerings` — offerings and packages (which products the paywall shows), the current offering. Аргументы: project_id
 - `customer` — one customer by app user id — active entitlements, subscriptions (status, renewal, period, revenue) and purchases; personal data only with include_pii. Аргументы: project_id, app_user_id*, environment, include_pii
+
+### `mk_app_store_connect` — App Store Connect: режимы
+
+- `fields` — reference of modes, report columns, product type identifiers, key roles per mode, latency and rate limit. Аргументы: без аргументов
+- `apps` — apps of the App Store Connect team (Apple id, name, bundle id, SKU, primary locale). Аргументы: без аргументов
+- `accounts` — same as apps, in the shared accounts shape. Аргументы: без аргументов
+- `sales` — Apple's own Sales and Trends for a required period (up to 92 days daily, or monthly) — installs, redownloads, updates, in-app purchases, subscription units, refunds and proceeds per currency (never converted), by date/country/device/product/app/product type; reports are Pacific-time, D+1. Аргументы: period*, app_id, group_by, frequency
+- `subscriptions` — subscription reports for a required period (up to 92 days) — report=summary: active subscriptions, trials, billing retry and grace period by day (snapshot); report=events: Subscribe, trial starts and conversions, Cancel, Refund, Reactivate counts by event/date/country/subscription. Аргументы: period*, report, group_by
+- `analytics` — App Store Analytics Reports of one app — funnel (impressions, page views, downloads, conversion), by source, sessions, installs/deletions, crashes, or any report by name; says so when analytics_enable has not been run for the app. Аргументы: period*, app_id*, report, report_name, category, group_by
+- `reviews` — customer reviews of an app with developer responses, filtered by territory, rating, period and response; average rating and counts; read-only. Аргументы: app_id*, territory, rating, period, has_response, limit
+- `versions` — App Store versions of an app (state, release type and date) with optional localized texts, plus app infos (name, subtitle). Аргументы: app_id*, platform, limit, include_localizations
+- `experiments` — Product Page Optimization experiments with treatments and custom product pages of an app; the API gives no test results. Аргументы: app_id*
+
+### `mk_app_store_connect_write` — App Store Connect, включение Analytics Reports: режимы
+
+- `analytics_enable` — WRITE (needs an Admin key): creates the ONGOING Analytics Reports request of an app so that analytics has data in 1–2 days; dry_run by default, confirm true only after the user's explicit yes. Аргументы: app_id*, dry_run, confirm
 
 ### `mk_apple` — App Store: режимы
 
@@ -655,6 +701,56 @@ AppsFlyer:
 раздел или он от другого проекта. Метрики и чарты — не больше 25 запросов в
 минуту на ключ.
 
+## Источник «App Store Connect» (`mk_app_store_connect`)
+
+`mk_app_store_connect` — App Store Connect API, официальные данные Apple по **вашим** приложениям
+(командный ключ сохранён на сайте): продажи и загрузки (`sales`), отчёты по подпискам
+и их события (`subscriptions`), воронка App Store и источники трафика, сессии, удаления,
+краши (`analytics`), отзывы с ответами (`reviews`), версии и состояния (`versions`),
+эксперименты Product Page Optimization и custom product pages (`experiments`), список
+приложений (`apps`). Единственная запись — `analytics_enable` у отдельного инструмента `mk_app_store_connect_write` (у `mk_app_store_connect` её нет).
+
+**Когда брать.** Нужны цифры из самого App Store Connect: сколько установок, повторных
+загрузок и обновлений по странам и устройствам, выручка и возвраты, активные подписки и
+пробные, отмены и конверсия триала по отчётам Apple, показы → просмотры страницы →
+загрузки, отзывы и ответы на них, что сейчас в App Store по версиям. Не путай:
+`mk_apple` — публичные данные **любого** приложения без ключа (рейтинг, текущая версия,
+топы); `mk_appsflyer` — атрибуция по медиа-источникам и кампаниям; `mk_revenuecat` —
+подписки по всем магазинам, MRR и метрики почти в реальном времени. App Store Connect —
+свои приложения, задержка D+1 (отчёт за день готов к ~8:00 по тихоокеанскому времени
+следующего дня), без MRR и без разбивки по рекламным кампаниям.
+
+**Порядок.** Сначала `apps` — взять Apple id приложения (`app_id`). `sales`: `period`
+до 92 дней (дневные отчёты) или `frequency: MONTHLY`; `group_by` — date, country, device,
+product, app, product_type (до двух). Деньги в ответе по валютам выплат и покупателей,
+**не пересчитываются**; возвраты — отрицательные единицы; в `missing_dates` — дни без
+отчёта (вчера до 8:00 PT отчёта может ещё не быть — скажи об этом, не считай ошибкой).
+`subscriptions`: `report: summary` — слепок активных подписок по дням (итог берётся за
+последнюю дату, не суммируется), `report: events` — события (новые, триалы, конверсия
+триала, отмены, возвраты, реактивации). `analytics`: `report` funnel, sources, sessions,
+installs, crashes или custom; данных за последние 2–5 дней может не быть (запаздывание),
+у малых приложений — пороги приватности (от 5 пользователей). Удержания (retention)
+готовым отчётом в API нет — не выдумывай. `experiments`: результатов тестов (конверсия,
+уверенность) в API нет — только настройка и состояние.
+
+**Включение аналитики.** Если `analytics` отвечает `enabled: false`, предложи
+`analytics_enable`. Это запись в аккаунт: сначала вызови с `dry_run` (по умолчанию), покажи
+пользователю план и дождись явного «да»; только затем повтори с `dry_run: false` и
+`confirm: true`. Нужен ключ с ролью Admin; данные появятся через 1–2 дня. Если запрос уже
+есть, режим скажет `already_enabled` и ничего не создаст. Ответы на отзывы пока не
+поддерживаются.
+
+**Ключ.** Нет ключа (`app_store_connect_key_missing`) — ключ сохраняется один раз на
+https://marketing-kit.app/connections#app-store-connect: Issuer ID, Key ID и файл `.p8`
+(App Store Connect → Users and Access → Integrations → Team Keys). Нужен командный
+(team) ключ, личный не читает продажи. Для `sales` и `subscriptions` ещё номер поставщика
+(`app_store_connect_vendor_number_missing`): Payments and Financial Reports, слева вверху.
+Роли: `sales`, `subscriptions`, `analytics` — Admin, Sales and Reports или Finance;
+`analytics_enable` — только Admin; `apps`, `reviews`, `versions`, `experiments` — Admin,
+App Manager, Developer или Marketing. Один ключ на всё — Admin. 401 — Apple не принял
+ключ (проверь Issuer ID, Key ID, не отозван ли); 403 — роли не хватает (в тексте названа
+нужная); 429 — лимит около 3500 запросов в час на ключ.
+
 ## Источник «App Store» (`mk_apple`)
 
 `mk_apple` — публичные API App Store (iTunes Lookup, Customer Reviews RSS, Marketing Tools Charts). Никаких ключей и авторизации не требует.
@@ -702,11 +798,26 @@ AppsFlyer:
    `confirm: true` значит, что сервер ничего не применил — не выдавай это за
    выполненное.
 
+## Запись: включение Analytics Reports (`mk_app_store_connect_write`)
+
+Единственная запись в App Store Connect — режим `analytics_enable`: создаёт
+ONGOING-запрос Analytics Reports, без которого `analytics` отвечает `enabled:
+false`. Работай так:
+
+1. Вызови сначала с `dry_run: true` (по умолчанию), покажи пользователю план и
+   дождись явного «да» на это включение.
+2. Только после «да» повтори с `dry_run: false` и `confirm: true`. Сам
+   `confirm: true` не ставь никогда. Нужен ключ с ролью Admin.
+3. Скажи, что данные появятся через 1–2 дня. Никогда не включай аналитику
+   сам, «заодно».
+
+Ответы на отзывы пока не поддерживаются — только чтение отзывов.
+
 ## Чего не делать
 
 - Не проси и не принимай в чате токены, пароли, ключи API — секреты
   сохраняются только на https://marketing-kit.app/connections (AppsFlyer,
-  RevenueCat) либо через вход в браузере.
+  RevenueCat, App Store Connect) либо через вход в браузере.
 - Не отдавай сырые персональные данные (ID устройств, IP,
   `customer_user_id`, атрибуты клиента RevenueCat вроде `$email` и похожее), если пользователь явно не попросил и не
   объяснил зачем.
