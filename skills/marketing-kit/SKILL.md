@@ -3,7 +3,7 @@ name: marketing-kit
 description: |-
   Реклама, аналитика и подписки через коннектор Marketing Kit: расход, показы, клики, установки, события, кампании, конверсии, MRR, подписки, выручка, отзывы App Store. Применяй, когда речь о маркетинговых цифрах, даже если источник не назван («сколько потратили», «сколько установок», «что с кампанией», «установки в App Store», «продажи App Store Connect», «отзывы», «воронка App Store»). Работает через коннектор Marketing Kit (marketing-kit.app); инструменты: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_appsflyer (AppsFlyer), mk_appsflyer_write (правки OneLink), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect, свои приложения), mk_app_store_connect_write (включение Analytics Reports), mk_apple (App Store, публичные данные); начинай с mk_status.
 metadata:
-  version: "1.7.6"
+  version: "1.8.0"
   title: Marketing Kit
 ---
 
@@ -88,7 +88,7 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
 
 В начале сессии, один раз, вызови `mk_status`.
 
-- **Версии.** Сверь `server.version` с версией этого скила (`1.7.6`).
+- **Версии.** Сверь `server.version` с версией этого скила (`1.8.0`).
   Сервер новее — скажи одной строкой, что плагин Marketing Kit обновится сам
   (скил подтягивается вместе с плагином), и работай дальше, не переспрашивай.
 - **Первый шаг.** Если в ответе `mk_status` есть `next_step` — скажи пользователю эту
