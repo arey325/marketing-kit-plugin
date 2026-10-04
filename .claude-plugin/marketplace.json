@@ -5,14 +5,14 @@
     "email": "connect@valas.team"
   },
   "metadata": {
-    "description": "V-Kit (Marketing Kit): your ad, app and subscription numbers — in Claude."
+    "description": "V-Kit (v-marketing-kit · Marketing Kit): your ad, app and subscription numbers — in Claude."
   },
   "plugins": [
     {
       "name": "v-marketing-kit",
       "source": "./",
-      "description": "V-Kit (Marketing Kit): your ad, app and subscription numbers — Meta Ads, Facebook Pages, Instagram, TikTok Ads, Google Ads, GA4, Search Console, AppsFlyer, RevenueCat, App Store Connect and the public App Store — in Claude.",
-      "version": "1.13.0"
+      "description": "V-Kit (v-marketing-kit · Marketing Kit): your ad, app and subscription numbers — Meta Ads, Facebook Pages, Instagram, TikTok Ads, Google Ads, GA4, Search Console, AppsFlyer, RevenueCat, App Store Connect and the public App Store — in Claude.",
+      "version": "1.13.1"
     }
   ]
 }
