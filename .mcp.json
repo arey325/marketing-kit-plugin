@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "marketing-kit": {
+    "v-marketing-kit": {
       "type": "http",
       "url": "https://marketing-kit.app/mcp"
     }

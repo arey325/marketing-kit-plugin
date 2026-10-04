@@ -1,15 +1,15 @@
 ---
-name: marketing-kit
+name: v-marketing-kit
 description: |-
-  Реклама, аналитика и подписки через коннектор Marketing Kit: расход, показы, клики, установки, события, кампании, конверсии, MRR, подписки, выручка, отзывы App Store. Применяй, когда речь о маркетинговых цифрах, даже если источник не назван («сколько потратили», «сколько установок», «что с кампанией», «установки в App Store», «продажи App Store Connect», «отзывы», «воронка App Store»). Работает через коннектор Marketing Kit (marketing-kit.app); инструменты: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_appsflyer (AppsFlyer), mk_appsflyer_write (правки OneLink), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect, свои приложения), mk_app_store_connect_write (включение Analytics Reports), mk_apple (App Store, публичные данные); начинай с mk_status.
+  V-Kit (Marketing Kit): реклама, аналитика и подписки через коннектор V-Kit — расход, показы, клики, установки, события, кампании, конверсии, MRR, подписки, выручка, отзывы App Store. Применяй, когда речь о маркетинговых цифрах, даже если источник не назван («сколько потратили», «сколько установок», «что с кампанией», «установки в App Store», «продажи App Store Connect», «отзывы», «воронка App Store»). Работает через коннектор V-Kit (marketing-kit.app); инструменты: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_appsflyer (AppsFlyer), mk_appsflyer_write (правки OneLink), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect, свои приложения), mk_app_store_connect_write (включение Analytics Reports), mk_apple (App Store, публичные данные); начинай с mk_status.
 metadata:
-  version: "1.12.0"
-  title: Marketing Kit
+  version: "1.13.0"
+  title: V-Kit
 ---
 
-# Marketing Kit
+# V-Kit (Marketing Kit)
 
-Реклама, аналитика и подписки через коннектор Marketing Kit (сервер marketing-kit.app):
+Реклама, аналитика и подписки через коннектор V-Kit (сервер marketing-kit.app):
 одиннадцать источников, по инструменту на каждый, `mk_appsflyer_write` для правок
 OneLink, `mk_app_store_connect_write` для включения Analytics Reports и `mk_status` для проверки подключений. Источник
 выбирай по имени инструмента — не ищи обход через соседний.
@@ -88,8 +88,8 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
 
 В начале сессии, один раз, вызови `mk_status`.
 
-- **Версии.** Сверь `server.version` с версией этого скила (`1.12.0`).
-  Сервер новее — скажи одной строкой, что плагин Marketing Kit обновится сам
+- **Версии.** Сверь `server.version` с версией этого скила (`1.13.0`).
+  Сервер новее — скажи одной строкой, что плагин V-Kit обновится сам
   (скил подтягивается вместе с плагином), и работай дальше, не переспрашивай.
 - **Первый шаг.** Если в ответе `mk_status` есть `next_step` — скажи пользователю эту
   фразу со ссылкой раньше всего остального.
@@ -101,20 +101,23 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
   вызвать нечего, поэтому не ищи обходных путей и не предлагай другие сервисы
   (Supermetrics и т. п.) первым делом. Дай пользователю шаги дословно, по порядку,
   со ссылками:
-  1. В чате: **+** (plus) → **Connectors** → **Marketing Kit** → **Connect**.
-  2. Marketing Kit там нет: https://claude.ai/customize/connectors → вкладка **Yours** →
-     **Marketing Kit** → **Connect**. Нет и там: **Add custom connector** → Name
-     `Marketing Kit`, URL `https://marketing-kit.app/mcp`, поля OAuth пустые → **Add** → **Connect**.
-  3. Плагин: https://claude.ai/customize/plugins/yours → **Marketing Kit** → вкладка
+  1. В чате: **+** (plus) → **Connectors** → **V-Kit** (добавленный до октября 2026 —
+     **Marketing Kit**) → **Connect**.
+  2. V-Kit там нет: https://claude.ai/customize/connectors → вкладка **Yours** →
+     **V-Kit** → **Connect**. Нет и там: **Add custom connector** → Name
+     `V-Kit`, URL `https://marketing-kit.app/mcp`, поля OAuth пустые → **Add** → **Connect**.
+  3. Плагин: https://claude.ai/customize/plugins/yours → **V-Kit** → вкладка
      **Connectors** → **Connect**. После «Add marketplace» claude.ai показывает **Discover**:
-     switch to **Yours** or type “Marketing Kit” in the search box. Шаги установки плагина —
+     switch to **Yours** or type “V-Kit” in the search box. Шаги установки плагина —
      https://marketing-kit.app/install#plugin.
   4. После **Connect**: вход через Google или Meta → **Allow** → открыть **новый чат**.
      Затем источники — на https://marketing-kit.app/connections. Тот же аккаунт работает в
      приложении Claude на компьютере и на телефоне.
   Цифры без инструментов не выдумывай. Запасной вариант — одной строкой в конце и только
   если пользователь сам спросит (например, другой подключённый сервис).
-- **Вход.** Войти в Marketing Kit нужно один раз — через коннектор (Connect)
+- **Инструменты `mk_*` дважды** (старый плагин или скил Marketing Kit — `marketing-kit` —
+  рядом с V-Kit) — скажи удалить старое: https://marketing-kit.app/install#migrate.
+- **Вход.** Войти в V-Kit нужно один раз — через коннектор (Connect)
   в Claude (подключение — путь выше): откроется страница marketing-kit.app, вход через Google или Meta.
   Ответ «нужно войти» или `source_not_authorized` — отправь пользователя на
   https://marketing-kit.app/connections. Никогда не проси токен, пароль или код
@@ -673,7 +676,7 @@ Connector»:
    `revenue` RevenueCat по дням; скажи, что разделить SDK и S2S без Raw Data
    нельзя.
 
-Marketing Kit здесь только читает и советует: ни в AppsFlyer, ни в
+V-Kit здесь только читает и советует: ни в AppsFlyer, ни в
 RevenueCat, ни в коде приложения он ничего не меняет.
 
 #### Запись (ADR-0005): только OneLink-ссылки и копия партнёрской интеграции
@@ -861,6 +864,6 @@ false`. Работай так:
 
 ## Чего не делать
 
-- Не используй Supermetrics и браузер для данных, которые есть в этих источниках. Пока инструментов Marketing Kit нет — не предлагай их первым делом, только путь к **Connect** (см. выше).
+- Не используй Supermetrics и браузер для данных, которые есть в этих источниках. Пока инструментов V-Kit нет — не предлагай их первым делом, только путь к **Connect** (см. выше).
 - Не отдавай сырые персональные данные (ID устройств, IP, `customer_user_id`,
   `$email` клиента RevenueCat), если пользователь явно не попросил и не объяснил зачем.

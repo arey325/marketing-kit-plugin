@@ -1,18 +1,18 @@
 {
-  "name": "marketing-kit",
+  "name": "v-marketing-kit",
   "owner": {
     "name": "VALAS OÜ – podružnica v Sloveniji",
     "email": "connect@valas.team"
   },
   "metadata": {
-    "description": "Marketing Kit: ads, analytics and subscriptions in Claude."
+    "description": "V-Kit (Marketing Kit): your ad, app and subscription numbers — in Claude."
   },
   "plugins": [
     {
-      "name": "marketing-kit",
+      "name": "v-marketing-kit",
       "source": "./",
-      "description": "Ask Claude about your ads, analytics and subscriptions: Meta Ads, Facebook Pages, Instagram, TikTok Ads, Google Ads, GA4, Search Console, AppsFlyer, RevenueCat, App Store Connect and the public App Store, through the Marketing Kit connector.",
-      "version": "1.12.0"
+      "description": "V-Kit (Marketing Kit): your ad, app and subscription numbers — Meta Ads, Facebook Pages, Instagram, TikTok Ads, Google Ads, GA4, Search Console, AppsFlyer, RevenueCat, App Store Connect and the public App Store — in Claude.",
+      "version": "1.13.0"
     }
   ]
 }
