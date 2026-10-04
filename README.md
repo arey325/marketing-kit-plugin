@@ -24,7 +24,7 @@ on your phone too.
    client fields empty and press **Add**.
 2. Press **Connect**, sign in with Google or Meta and press **Allow**. Then
    authorize your sources on https://marketing-kit.app/connections.
-3. Start a new chat (https://claude.ai/new) and ask: “Check my V-Kit status”.
+3. Start a new chat (https://claude.ai/new) and ask: “Check my v-marketing-kit status”.
 
 The plugin below is optional: it adds a reference skill next to the same
 connector.
@@ -116,7 +116,7 @@ Step by step: https://marketing-kit.app/install#migrate.
 3. Sign in at marketing-kit.app with Google or Meta.
 4. On https://marketing-kit.app/connections authorize the sources you need and
    save the AppsFlyer, RevenueCat and App Store Connect keys there.
-5. Ask Claude. A good first message is: `check V-Kit status`.
+5. Ask Claude. A good first message is: `check v-marketing-kit status`.
 
 ## What is in the plugin and where your data goes
 
