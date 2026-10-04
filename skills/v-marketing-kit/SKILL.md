@@ -3,7 +3,7 @@ name: v-marketing-kit
 description: |-
   V-Kit (Marketing Kit): реклама, аналитика и подписки через коннектор V-Kit — расход, показы, клики, установки, события, кампании, конверсии, MRR, подписки, выручка, отзывы App Store. Применяй, когда речь о маркетинговых цифрах, даже если источник не назван («сколько потратили», «сколько установок», «что с кампанией», «установки в App Store», «продажи App Store Connect», «отзывы», «воронка App Store»). Работает через коннектор V-Kit (marketing-kit.app); инструменты: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_appsflyer (AppsFlyer), mk_appsflyer_write (правки OneLink), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect, свои приложения), mk_app_store_connect_write (включение Analytics Reports), mk_apple (App Store, публичные данные); начинай с mk_status.
 metadata:
-  version: "1.13.3"
+  version: "1.13.4"
   title: V-Kit
 ---
 
@@ -88,7 +88,7 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
 
 В начале сессии, один раз, вызови `mk_status`.
 
-- **Версии.** Сверь `server.version` с версией этого скила (`1.13.3`).
+- **Версии.** Сверь `server.version` с версией этого скила (`1.13.4`).
   Сервер новее — скажи одной строкой, что плагин V-Kit обновится сам
   (скил подтягивается вместе с плагином), и работай дальше, не переспрашивай.
 - **Первый шаг.** Если в ответе `mk_status` есть `next_step` — скажи пользователю эту
@@ -101,12 +101,12 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
   вызвать нечего, поэтому не ищи обходных путей и не предлагай другие сервисы
   (Supermetrics и т. п.) первым делом. Дай пользователю шаги дословно, по порядку,
   со ссылками:
-  1. В чате: **+** (plus) → **Connectors** → **V-Kit** (добавленный до октября 2026 —
+  1. В чате: **+** (plus) → **Connectors** → **v-marketing-kit** (добавленный до октября 2026 —
      **Marketing Kit**) → **Connect**.
-  2. V-Kit там нет: https://claude.ai/customize/connectors → вкладка **Yours** →
-     **V-Kit** → **Connect**. Нет и там: **Add custom connector** → Name
-     `V-Kit`, URL `https://marketing-kit.app/mcp`, поля OAuth пустые → **Add** → **Connect**.
-  3. Плагин: https://claude.ai/customize/plugins/yours → **V-Kit** → вкладка
+  2. v-marketing-kit там нет: https://claude.ai/customize/connectors → вкладка **Yours** →
+     **v-marketing-kit** → **Connect**. Нет и там: **Add custom connector** → Name
+     `v-marketing-kit`, URL `https://marketing-kit.app/mcp`, поля OAuth пустые → **Add** → **Connect**.
+  3. Плагин: https://claude.ai/customize/plugins/yours → **v-marketing-kit** → вкладка
      **Connectors** → **Connect**. После «Add marketplace» claude.ai показывает **Discover**:
      switch to **Yours** or type “marketing” in the search box (плагин — **v-marketing-kit**). Шаги установки плагина —
      https://marketing-kit.app/install#plugin.
