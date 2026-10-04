@@ -3,7 +3,7 @@ name: marketing-kit
 description: |-
   Реклама, аналитика и подписки через коннектор Marketing Kit: расход, показы, клики, установки, события, кампании, конверсии, MRR, подписки, выручка, отзывы App Store. Применяй, когда речь о маркетинговых цифрах, даже если источник не назван («сколько потратили», «сколько установок», «что с кампанией», «установки в App Store», «продажи App Store Connect», «отзывы», «воронка App Store»). Работает через коннектор Marketing Kit (marketing-kit.app); инструменты: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_appsflyer (AppsFlyer), mk_appsflyer_write (правки OneLink), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect, свои приложения), mk_app_store_connect_write (включение Analytics Reports), mk_apple (App Store, публичные данные); начинай с mk_status.
 metadata:
-  version: "1.8.3"
+  version: "1.8.4"
   title: Marketing Kit
 ---
 
@@ -88,7 +88,7 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
 
 В начале сессии, один раз, вызови `mk_status`.
 
-- **Версии.** Сверь `server.version` с версией этого скила (`1.8.3`).
+- **Версии.** Сверь `server.version` с версией этого скила (`1.8.4`).
   Сервер новее — скажи одной строкой, что плагин Marketing Kit обновится сам
   (скил подтягивается вместе с плагином), и работай дальше, не переспрашивай.
 - **Первый шаг.** Если в ответе `mk_status` есть `next_step` — скажи пользователю эту
@@ -252,10 +252,11 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
 
 ### `mk_appsflyer` — AppsFlyer: режимы
 
-- `fields` — core stub. Аргументы: mode
+- `fields` — reference: aggregate and raw report names, key raw columns, purchase_dedup arguments and output fields. Аргументы: без аргументов
 - `accounts` — the account's apps (app_id, platform, name) — App list API (dev.appsflyer.com/hc/reference/app-list-ad-nets-api-get). Аргументы: без аргументов
 - `aggregate` — aggregated Pull API reports (daily_report, partners_report, partners_by_date_report, geo_report, geo_by_date_report) — installs and in-app by media source/campaign/adset/geo; a period is required. Аргументы: period*, app_id*, report*, timezone, media_source, category, currency, additional_fields, maximum_rows, save
 - `raw` — raw Pull API events row by row (installs_report, in_app_events_report, organic_installs_report, organic_in_app_events_report) — only with the Raw Data module in the plan; PII is stripped by default, include_pii turns it on explicitly. Аргументы: period*, app_id*, report*, timezone, media_source, event_name, geo, additional_fields, maximum_rows, include_pii, save
+- `purchase_dedup` — purchase duplicates between the app (SDK) and server-to-server events (RevenueCat): raw in-app events for up to 31 days by Event Source and receipt validation, duplicate groups, signals and the recommended one-source-per-event scheme; counts only, no ids; needs the Raw Data module. Аргументы: period*, app_id*, timezone, event_names, first_purchase_events, match_window_minutes, maximum_rows
 - `onelink` — read one short OneLink link by its ID (campaign parameters, template_id) — GET only. Аргументы: shortlink_id*
 
 ### `mk_appsflyer_write` — AppsFlyer, изменение OneLink и интеграций: режимы
