@@ -3,7 +3,7 @@ name: marketing-kit
 description: |-
   Реклама, аналитика и подписки через коннектор Marketing Kit: расход, показы, клики, установки, события, кампании, конверсии, MRR, подписки, выручка, отзывы App Store. Применяй, когда речь о маркетинговых цифрах, даже если источник не назван («сколько потратили», «сколько установок», «что с кампанией», «установки в App Store», «продажи App Store Connect», «отзывы», «воронка App Store»). Работает через коннектор Marketing Kit (marketing-kit.app); инструменты: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_appsflyer (AppsFlyer), mk_appsflyer_write (правки OneLink), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect, свои приложения), mk_app_store_connect_write (включение Analytics Reports), mk_apple (App Store, публичные данные); начинай с mk_status.
 metadata:
-  version: "1.6.0"
+  version: "1.6.1"
   title: Marketing Kit
 ---
 
@@ -99,7 +99,7 @@ https://marketing-kit.app/connections (рекламное подключение
 
 В начале сессии, один раз, вызови `mk_status`.
 
-- **Версии.** Сверь `server.version` с версией этого скила (`1.6.0`).
+- **Версии.** Сверь `server.version` с версией этого скила (`1.6.1`).
   Сервер новее — скажи одной строкой, что плагин Marketing Kit обновится сам
   (скил подтягивается вместе с плагином), и работай дальше, не переспрашивай.
 - **Источники.** В `sources` у каждого источника — `authorized`. Нужный
@@ -201,8 +201,9 @@ https://marketing-kit.app/connections (рекламное подключение
   присылают. Роль Admin покрывает всё; для чтения хватает Sales and Reports или
   Finance (продажи, подписки, аналитика) и App Manager (приложения, отзывы,
   версии); включение аналитики — только Admin.
-- **Google Ads** — ID менеджерского аккаунта (Login customer ID), если доступ к
-  аккаунту идёт через MCC: https://marketing-kit.app/connections#google_ads.
+- **Google Ads** — ничего вписывать не нужно: менеджерский аккаунт (MCC) сервер
+  определяет сам. Login customer ID на https://marketing-kit.app/connections#google_ads
+  (раздел Advanced) — только если кабинет виден через несколько MCC и нужен конкретный.
 
 Не проси токен или ключ в чате: ответ `appsflyer_token_missing` /
 `revenuecat_key_missing`, `app_store_connect_key_missing` или `authorized: false` у `appsflyer` / `revenuecat` / `app_store_connect` в
@@ -249,7 +250,7 @@ https://marketing-kit.app/connections (рекламное подключение
 ### `mk_google_ads` — Google Ads: режимы
 
 - `fields` — GAQL field metadata (googleAdsFields:search) — check names before a query. Аргументы: names, name_like
-- `accounts` — accessible customer_ids (customers:listAccessibleCustomers). Аргументы: без аргументов
+- `accounts` — accessible customer_ids (customers:listAccessibleCustomers). Аргументы: refresh
 - `report` — arbitrary GAQL report via googleAds:search; a period and LIMIT are required. Аргументы: period*, customer_id*, query*, save
 - `objects` — reference lists: campaigns / ad_groups / ads / conversion_actions. Аргументы: customer_id*, object*, status_filter, limit, save
 
@@ -469,9 +470,15 @@ AppsFlyer ожидай расхождение.
 
 **Вход.** Доступ через подключение Google на https://marketing-kit.app/connections: один раз, сразу для GA4, Google Ads и Search Console. Источник не авторизован (`authorized: false`, ошибка `source_not_authorized`) — отправь пользователя туда; режима `connect` у инструмента нет. Какие аккаунты видны (property в GA4, customer_id в Google Ads) — решают права подключённого Google-аккаунта в самом сервисе.
 
-**Аккаунты.** `mode=accounts` — только customer_id, доступные текущему
-входу напрямую. Если аккаунт находится под менеджерским (MCC), а прямого
-доступа нет — он в списке не появится; для входа через MCC ID менеджерского аккаунта (Login customer ID) сохраняется на https://marketing-kit.app/connections#google_ads.
+**Аккаунты.** `mode=accounts` — все кабинеты, которые видит этот Google-аккаунт:
+и доступные напрямую, и лежащие под менеджерскими (MCC) — с именем, статусом,
+путём (`direct` / `via_manager` с id и именем MCC) и пометкой `deactivated` для
+отменённых. Менеджерский аккаунт определяется сам и подставляется как
+`login-customer-id` в каждый запрос — просить пользователя вписывать
+login customer ID не нужно. Карта кэшируется на час, `refresh: true`
+пересобирает её. Вручную заданный login customer ID (override) важнее автоопределения — нужен только если кабинет виден
+через несколько MCC и нужен конкретный. `USER_PERMISSION_DENIED` и с найденным
+MCC — кабинет не виден этому Google-аккаунту: пусть проверит доступ в Google Ads.
 
 **Поля.** Не угадывай имена GAQL-полей: `mode=fields` с `names` (точные
 имена) или `name_like` (подстрока) — вернёт `selectable`/`filterable`/
