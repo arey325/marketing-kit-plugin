@@ -1,17 +1,17 @@
 ---
 name: v-marketing-kit
 description: |-
-  V-Kit (Marketing Kit): реклама, аналитика и подписки через коннектор V-Kit — расход, показы, клики, установки, события, кампании, конверсии, MRR, подписки, выручка, отзывы App Store. Применяй, когда речь о маркетинговых цифрах, даже если источник не назван («сколько потратили», «сколько установок», «что с кампанией», «установки в App Store», «продажи App Store Connect», «отзывы», «воронка App Store»). Работает через коннектор V-Kit (marketing-kit.app); инструменты: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_appsflyer (AppsFlyer), mk_appsflyer_write (правки OneLink), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect, свои приложения), mk_app_store_connect_write (включение Analytics Reports), mk_apple (App Store, публичные данные), mk_feedback (сообщение разработчику, бета); начинай с mk_status.
+  V-Kit (Marketing Kit): реклама, аналитика и подписки через коннектор V-Kit — расход, показы, клики, установки, события, кампании, конверсии, MRR, подписки, выручка, отзывы App Store. Применяй, когда речь о маркетинговых цифрах, даже если источник не назван («сколько потратили», «сколько установок», «что с кампанией», «установки в App Store», «продажи App Store Connect», «отзывы», «воронка App Store»). Работает через коннектор V-Kit (marketing-kit.app); инструменты: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_appsflyer (AppsFlyer), mk_appsflyer_write (копия настроек интеграции), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect, свои приложения), mk_app_store_connect_write (включение Analytics Reports), mk_apple (App Store, публичные данные), mk_feedback (сообщение разработчику, бета); начинай с mk_status.
 metadata:
-  version: "1.14.4"
+  version: "1.14.5"
   title: v-marketing-kit
 ---
 
 # V-Kit (Marketing Kit)
 
 Реклама, аналитика и подписки через коннектор V-Kit (сервер marketing-kit.app):
-одиннадцать источников, по инструменту на каждый, `mk_appsflyer_write` для правок
-OneLink, `mk_app_store_connect_write` для включения Analytics Reports, `mk_status` для проверки подключений и `mk_feedback` для сообщений разработчику (бета). Источник
+одиннадцать источников, по инструменту на каждый, `mk_appsflyer_write` для копии
+настроек интеграции, `mk_app_store_connect_write` для включения Analytics Reports, `mk_status` для проверки подключений и `mk_feedback` для сообщений разработчику (бета). Источник
 выбирай по имени инструмента — не ищи обход через соседний.
 
 | Инструмент | Для чего |
@@ -23,8 +23,8 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
 | `mk_google_ads` | Google Ads: отчёты GAQL и справочники кампаний, групп, объявлений, конверсионных действий |
 | `mk_ga4` | Google Analytics 4: события и поведение пользователей, воронки, пользователи и сессии, realtime, метаданные |
 | `mk_search_console` | Google Search Console: органический поиск Google — запросы, страницы, клики, показы, CTR, позиция; sitemaps; индексирование URL |
-| `mk_appsflyer` | AppsFlyer: установки и in-app события по источникам, сводные и сырые отчёты, дубли покупок приложение ↔ RevenueCat (`purchase_dedup`), OneLink |
-| `mk_appsflyer_write` | AppsFlyer: изменение OneLink-ссылок и копия настроек интеграции (только после подтверждения фразой: действие и объект) |
+| `mk_appsflyer` | AppsFlyer: установки и in-app события по источникам, сводные и сырые отчёты, дубли покупок приложение ↔ RevenueCat (`purchase_dedup`) |
+| `mk_appsflyer_write` | AppsFlyer: копия настроек интеграции (только после подтверждения фразой: действие и объект) |
 | `mk_revenuecat` | RevenueCat: подписки — MRR, ARR, активные подписки и триалы, выручка, отток, конверсия триала, LTV, возвраты, продукты и offerings, подписка одного клиента |
 | `mk_app_store_connect` | App Store Connect: официальные данные Apple по своим приложениям — загрузки, повторные загрузки и обновления, выручка (proceeds), отчёты по подпискам и их события, воронка App Store (показы → просмотры страницы → загрузки), сессии, краши, отзывы с ответами, версии, эксперименты PPO; задержка D+1 |
 | `mk_app_store_connect_write` | App Store Connect: включение Analytics Reports (`analytics_enable`; только после подтверждения фразой: действие и объект) |
@@ -89,7 +89,7 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
 
 В начале сессии, один раз, вызови `mk_status`.
 
-- **Версии.** Сверь `server.version` с версией этого скила (`1.14.4`).
+- **Версии.** Сверь `server.version` с версией этого скила (`1.14.5`).
   Сервер новее — скажи одной строкой, что плагин V-Kit обновится сам
   (скил подтягивается вместе с плагином), и работай дальше, не переспрашивай.
 - **Первый шаг.** Если в ответе `mk_status` есть `next_step` — скажи пользователю эту
@@ -170,7 +170,7 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
 (сервер хранит их зашифрованными):
 
 - **AppsFlyer** — API token V2 из AppsFlyer → меню профиля → Security Center → AppsFlyer tokens
-  (для чтения); для `mk_appsflyer_write` ещё отдельный токен OneLink API.
+  ((только он нужен и для чтения, и для `mk_appsflyer_write`).
   Инструкция: https://marketing-kit.app/connections#appsflyer.
 - **RevenueCat** — secret API key **V2** с правами только на чтение
   (RevenueCat → Project settings → API keys → + New secret API key, версия V2,
@@ -261,11 +261,9 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
 - `aggregate` — aggregated Pull API reports (daily_report, partners_report, partners_by_date_report, geo_report, geo_by_date_report) — installs and in-app by media source/campaign/adset/geo; a period is required. Аргументы: period*, app_id*, report*, timezone, media_source, category, currency, additional_fields, maximum_rows, save
 - `raw` — raw Pull API events row by row (installs_report, in_app_events_report, organic_installs_report, organic_in_app_events_report) — only with the Raw Data module in the plan; PII is stripped by default, include_pii turns it on explicitly. Аргументы: period*, app_id*, report*, timezone, media_source, event_name, geo, additional_fields, maximum_rows, include_pii, save
 - `purchase_dedup` — purchase duplicates between the app (SDK) and server-to-server events (RevenueCat): raw in-app events for up to 31 days by Event Source and receipt validation, duplicate groups, signals and the recommended one-source-per-event scheme; counts only, no ids; needs the Raw Data module. Аргументы: period*, app_id*, timezone, event_names, first_purchase_events, match_window_minutes, maximum_rows
-- `onelink` — read one short OneLink link by its ID (campaign parameters, template_id) — GET only. Аргументы: shortlink_id*
 
-### `mk_appsflyer_write` — AppsFlyer, изменение OneLink и интеграций: режимы
+### `mk_appsflyer_write` — AppsFlyer, копия настроек интеграции: режимы
 
-- `onelink_write` — create/update/delete a short OneLink link (action: create|update|delete). dry_run: true by default — before → after with no changes; applied only with confirm: true. A separate OneLink API token (сохраняется на https://marketing-kit.app/connections#appsflyer). Аргументы: action*, shortlink_id*, data, ttl, brand_domain, dry_run, confirm
 - `integration_copy` — copies partner integration settings (general_params, in_app_postbacks_params, including the postback event mapping) from one app to another for one platform — not a setup from scratch, only cloning what is already configured in the UI. dry_run: true by default, applied only with confirm: true. Аргументы: pid*, platform*, from_app_id*, to_app_ids*, dry_run, confirm
 
 ### `mk_revenuecat` — RevenueCat: режимы
@@ -604,8 +602,6 @@ Google Cloud project») — настройка владельца сервиса
   ПДн (device/рекламные ID, IP, `customer_user_id`) стрипаются по
   умолчанию; `include_pii: true` возвращает их — используй, только если
   пользователь явно попросил и объяснил зачем.
-- `onelink` — чтение одной короткой ссылки по `shortlink_id` (параметры
-  кампании, `template_id`). Только GET.
 - `purchase_dedup` — дубли покупок между приложением (SDK) и
   server-to-server событиями (RevenueCat → AppsFlyer) за период до 31 дня;
   только счётчики, без id. Нужен модуль Raw Data. Рецепт — ниже.
@@ -680,24 +676,17 @@ Connector»:
 V-Kit здесь только читает и советует: ни в AppsFlyer, ни в
 RevenueCat, ни в коде приложения он ничего не меняет.
 
-#### Запись (ADR-0005): только OneLink-ссылки и копия партнёрской интеграции
+#### Запись (ADR-0005, ADR-0043): только копия партнёрской интеграции
 
-Режимы записи — у отдельного инструмента `mk_appsflyer_write` (у `mk_appsflyer` их нет); единственная поверхность записи этого источника — по решению владельца. Каждый режим записи: `dry_run: true` по умолчанию —
+Единственная поверхность записи этого источника. OneLink-ссылки V-Kit не создаёт,
+не меняет и не читает (ADR-0043) — скажи, что это делается в кабинете
+AppsFlyer. Режим записи: `dry_run: true` по умолчанию —
 показывает объект/поля/before → after и ничего не меняет; применяется
 только с явным `confirm: true` (перед этим попроси подтвердить фразой, которая
 называет действие и объект, а не коротким «да»; согласие не переносится с
 предыдущего вызова); после применения инструмент
 сам перечитывает объект и возвращает новое состояние; до/после пишутся в журнал сервера.
 
-- `onelink_write` — создание/обновление/удаление короткой OneLink-ссылки
-  (`action: create|update|delete`, `POST/PUT/DELETE
-  onelink.appsflyer.com/api/v2.0/shortlinks/{id}`). Требует **отдельный**
-  OneLink API-токен (сохраняется на https://marketing-kit.app/connections#appsflyer, не тот же
-  токен, что для чтения) — включается через менеджера AppsFlyer (CSM), после
-  генерации активируется до 30 минут. 401/403 на этом режиме почти всегда
-  означает, что токен ещё не включён CSM или не активировался — не пытайся
-  чинить это подстановкой другого токена, скажи пользователю обратиться к
-  CSM.
 - `integration_copy` — копирует `general_params`/`in_app_postbacks_params`
   партнёра (включая маппинг событий постбэков) с одного приложения на
   другое, одна платформа за вызов. Это **клонирование уже настроенной в UI
@@ -837,13 +826,13 @@ App Manager, Developer или Marketing. Один ключ на всё — Admin
 ## Запись (только AppsFlyer, `mk_appsflyer_write`)
 
 Все источники, кроме AppsFlyer, только для чтения, а чтение AppsFlyer — это
-`mk_appsflyer`. Изменения — отдельный инструмент `mk_appsflyer_write` (режимы
-`onelink_write`, `integration_copy`) — работай так:
+`mk_appsflyer`. Изменения — отдельный инструмент `mk_appsflyer_write` (режим
+`integration_copy`) — работай так:
 
 1. Вызови сначала с `dry_run: true` (по умолчанию) и покажи пользователю, что
    именно изменится: объект, поле, **было → станет**.
 2. Попроси подтвердить **это** изменение фразой, которая называет действие и
-   объект (например «Поменяй deep link OneLink jE51 на …»), а не коротким
+   объект (например «Скопируй настройки интеграции партнёра из приложения A в B»), а не коротким
    «да»; на голое «да» один раз попроси такую фразу. Только после неё применяй
    — вызовом с `dry_run: false` и `confirm: true`. Одно подтверждение — одно
    изменение; согласие на прошлое не переносится. Сам `confirm: true` не

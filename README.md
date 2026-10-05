@@ -8,7 +8,7 @@ Meta Ads, Facebook Pages, Instagram, TikTok Ads, Google Ads, Google Analytics 4,
 Google Search Console, AppsFlyer, RevenueCat, App Store Connect (your own
 apps, with a team key you save on the site) and the public App Store pages. It
 only reads, with two exceptions, each made only after you explicitly confirm
-the change: AppsFlyer OneLink links and integration settings, and turning on
+the change: AppsFlyer partner-integration settings copy, and turning on
 App Store Connect Analytics Reports.
 
 V-Kit is free while in beta; pricing will be announced in advance.
