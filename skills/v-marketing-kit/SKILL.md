@@ -3,7 +3,7 @@ name: v-marketing-kit
 description: |-
   V-Kit (Marketing Kit): реклама, аналитика и подписки через коннектор V-Kit — расход, показы, клики, установки, события, кампании, конверсии, MRR, подписки, выручка, отзывы App Store. Применяй, когда речь о маркетинговых цифрах, даже если источник не назван («сколько потратили», «сколько установок», «что с кампанией», «установки в App Store», «продажи App Store Connect», «отзывы», «воронка App Store»). Работает через коннектор V-Kit (marketing-kit.app); инструменты: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_appsflyer (AppsFlyer), mk_appsflyer_write (правки OneLink), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect, свои приложения), mk_app_store_connect_write (включение Analytics Reports), mk_apple (App Store, публичные данные), mk_feedback (сообщение разработчику, бета); начинай с mk_status.
 metadata:
-  version: "1.14.3"
+  version: "1.14.4"
   title: v-marketing-kit
 ---
 
@@ -89,7 +89,7 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
 
 В начале сессии, один раз, вызови `mk_status`.
 
-- **Версии.** Сверь `server.version` с версией этого скила (`1.14.3`).
+- **Версии.** Сверь `server.version` с версией этого скила (`1.14.4`).
   Сервер новее — скажи одной строкой, что плагин V-Kit обновится сам
   (скил подтягивается вместе с плагином), и работай дальше, не переспрашивай.
 - **Первый шаг.** Если в ответе `mk_status` есть `next_step` — скажи пользователю эту
@@ -169,7 +169,7 @@ OneLink, `mk_app_store_connect_write` для включения Analytics Report
 Пользователь сохраняет их сам на странице https://marketing-kit.app/connections
 (сервер хранит их зашифрованными):
 
-- **AppsFlyer** — API token V2 из AppsFlyer → Security center → API tokens
+- **AppsFlyer** — API token V2 из AppsFlyer → меню профиля → Security Center → AppsFlyer tokens
   (для чтения); для `mk_appsflyer_write` ещё отдельный токен OneLink API.
   Инструкция: https://marketing-kit.app/connections#appsflyer.
 - **RevenueCat** — secret API key **V2** с правами только на чтение
