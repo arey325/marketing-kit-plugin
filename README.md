@@ -11,7 +11,7 @@ only reads, with two exceptions, each made only after you explicitly confirm
 the change: AppsFlyer partner-integration settings copy, and turning on
 App Store Connect Analytics Reports.
 
-V-Kit is free while in beta; pricing will be announced in advance.
+V-Kit is free; any pricing will be announced in advance.
 
 ## Quickest way: a custom connector (no plugin needed)
 
