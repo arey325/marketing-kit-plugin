@@ -8,6 +8,7 @@
     "url": "https://marketing-kit.app"
   },
   "homepage": "https://marketing-kit.app",
+  "privacyPolicyUrl": "https://marketing-kit.app/privacy",
   "repository": "https://github.com/arey325/marketing-kit-plugin",
   "license": "MIT",
   "keywords": [
