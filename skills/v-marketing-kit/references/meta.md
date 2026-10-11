@@ -1,33 +1,32 @@
-# Meta Ads (`mk_meta`) — особенности источника
+# Meta Ads (`mk_meta`) — source specifics
 
-- Установки и конверсии — по окну атрибуции Meta (по умолчанию 7 дней после
-  клика и 1 день после просмотра). Для сверки с AppsFlyer запрашивай 1 день
-  после клика (`action_attribution_windows: ["1d_click"]`) или явно
-  указывай применённое окно из ответа.
-- Данные за последние 1–3 дня ещё дописываются — не считать их окончательными.
-- Кастомные события приложения в отчётах Insights могут попадать в
-  `app_custom_event.other`; по именам их видно в `mode=events`.
-- iOS: часть конверсий приходит через SKAN с задержкой до нескольких дней и
-  без разбивки ниже кампании.
-- Окна атрибуции `7d_view`/`28d_view` не возвращают данных с 12.01.2026 —
-  инструмент сам исключает их из запроса и сообщает об этом в
-  `action_attribution_windows.dropped` ответа `insights`.
-- Режим `events` — счётчики без источника (решение владельца, `Вопросы.md`
-  п.10): число каждого события за период известно (из `insights.actions` и
-  статистики пикселя), а откуда оно пришло — SDK приложения, Conversions
-  API или партнёрская интеграция — программно недоступно и в ответе
-  не указывается.
+- Installs and conversions follow Meta's attribution window (by default 7 days after
+  the click and 1 day after the view). To reconcile with AppsFlyer request 1 day
+  after the click (`action_attribution_windows: ["1d_click"]`) or state explicitly
+  the window applied, taken from the answer.
+- Data for the last 1–3 days is still being filled in — do not treat it as final.
+- Custom app events in Insights reports may land in
+  `app_custom_event.other`; by name they are visible in `mode=events`.
+- iOS: part of the conversions arrives through SKAN with a delay of up to several days
+  and without a breakdown below the campaign.
+- The attribution windows `7d_view`/`28d_view` return no data since 12 January 2026 —
+  the tool removes them from the request itself and reports it in
+  `action_attribution_windows.dropped` of the `insights` answer.
+- The `events` mode gives counters without a source (the owner's decision): the count of each event for the period is known (from `insights.actions` and
+  the pixel stats), but where it came from — the app's SDK, the Conversions
+  API or a partner integration — is not available programmatically and is not
+  given in the answer.
 
-## Готовые проверки
+## Ready-made checks
 
-1. **Двойной счёт событий в Meta.** `mode=events`: одно событие (например,
-   StartTrial) приходит и от SDK, и от партнёра AppsFlyer — двойной счёт.
-   Сверяй со счётчиком того же события у AppsFlyer за тот же период (вызови
+1. **Double counting of events in Meta.** `mode=events`: one event (for example,
+   StartTrial) arrives both from the SDK and from the AppsFlyer partner — double counting.
+   Reconcile with the counter of the same event in AppsFlyer for the same period (call
    `mk_appsflyer`).
-2. **Утечка атрибуции веб → стор.** `mode=insights` (клики в стор, окно
-   1 день после клика) против AppsFlyer по источнику `meta_web2app` за тот
-   же период: сильный разрыв на iOS ожидаем, на Android — повод искать
-   поломку OneLink.
-3. **Тишина после релиза.** `mode=events` за последние 2 дня: событие,
-   которое было, пропало — проверить маппинг в новой версии (пиксель или
-   кастомная конверсия могли перестать матчиться).
+2. **Attribution leak web → store.** `mode=insights` (clicks to the store, window
+   1 day after the click) against AppsFlyer by the source `meta_web2app` for the same
+   period: a large gap on iOS is expected, on Android it is a reason to look for a
+   broken OneLink.
+3. **Silence after a release.** `mode=events` for the last 2 days: an event that
+   used to be there has disappeared — check the mapping in the new version (the pixel
+   or a custom conversion may have stopped matching).

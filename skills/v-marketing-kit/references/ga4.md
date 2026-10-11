@@ -1,15 +1,15 @@
-# Особенности источника GA4
+# GA4 source specifics
 
 ## GA4 (`mk_ga4`)
 
-- Считает все источники, а не только рекламу. Для рекламы фильтруй по
-  источнику или user property `af_media_source`.
-- Данные стабилизируются за 24–48 часов; realtime — только последние 30 минут.
-- При малых выборках возможны пороги и сэмплирование — ответ их помечает.
+- Counts all sources, not only ads. For ads filter by the
+  source or by the user property `af_media_source`.
+- Data settles within 24–48 hours; realtime covers only the last 30 minutes.
+- With small samples thresholds and sampling are possible — the answer marks them.
 
-# Готовые проверки
+# Ready-made checks
 
-3. **Семантика событий.** Сравни по дням в `mk_ga4 report` пары событий,
-   которые не должны совпадать (старт триала и оплата, открытие окна покупки и
-   отмена). Полное совпадение или «следствие больше причины» — повод проверить
-   логирование.
+3. **Event semantics.** Compare by day in `mk_ga4 report` pairs of events
+   that must not match (trial start and payment, opening the purchase screen and
+   cancelling). A full match or "the effect is bigger than the cause" is a reason to check
+   the logging.

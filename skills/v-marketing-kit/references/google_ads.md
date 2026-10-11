@@ -1,7 +1,7 @@
-# Google Ads: особенности источника
+# Google Ads: source specifics
 
-- Конверсии — по дате клика, не по дате конверсии; окно задаётся в
-  конверсионном действии.
-- Стоимость в `cost_micros` — делить на 1 000 000. Режим `report`
-  возвращает готовое поле без суффикса `_micros` рядом с исходным — уже
-  делённое, пересчитывать вручную не нужно.
+- Conversions are by the click date, not by the conversion date; the window is set in the
+  conversion action.
+- The cost in `cost_micros` is to be divided by 1 000 000. The `report` mode
+  returns a ready field without the `_micros` suffix next to the original one — already
+  divided, no need to recalculate by hand.
