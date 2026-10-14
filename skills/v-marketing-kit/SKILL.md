@@ -1,17 +1,17 @@
 ---
 name: v-marketing-kit
 description: |-
-  V-Kit (Marketing Kit): ads, analytics and subscriptions through the V-Kit connector — spend, impressions, clicks, installs, events, campaigns, conversions, MRR, subscriptions, revenue, App Store reviews. Use when the question is about marketing numbers, even if the source is not named ("how much did we spend", "how many installs", "what's going on with the campaign", "App Store installs", "App Store Connect sales", "reviews", "App Store funnel"). Server: marketing-kit.app. Tools: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_appsflyer (AppsFlyer), mk_appsflyer_write (copy of integration settings), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect, your own apps), mk_app_store_connect_write (turning on Analytics Reports), mk_apple (App Store, public data), mk_feedback (a note to the developer); start with mk_status.
+  V-Kit (Marketing Kit): ads, analytics and subscriptions through the V-Kit connector — spend, impressions, clicks, installs, events, campaigns, conversions, MRR, subscriptions, revenue, App Store reviews. Use when the question is about marketing numbers, even if the source is not named ("how much did we spend", "how many installs", "what's going on with the campaign", "App Store installs", "Google Play installs", "reviews"). Server: marketing-kit.app. Tools: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_google_play (Google Play, your own apps), mk_appsflyer (AppsFlyer), mk_appsflyer_write (copy of integration settings), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect, your own apps), mk_app_store_connect_write (turning on Analytics Reports), mk_apple (App Store, public data), mk_feedback (a note to the developer), mk_trial_extend; start with mk_status.
 metadata:
-  version: "1.18.1"
+  version: "1.20.0"
   title: v-marketing-kit
 ---
 
 # V-Kit (Marketing Kit)
 
 Ads, analytics and subscriptions through the V-Kit connector (server marketing-kit.app):
-eleven sources, one tool for each, `mk_appsflyer_write` for copying
-integration settings, `mk_app_store_connect_write` for turning on Analytics Reports, `mk_status` to check the connections and `mk_feedback` for notes to the developer. Pick
+twelve sources, one tool for each, `mk_appsflyer_write` for copying
+integration settings, `mk_app_store_connect_write` for turning on Analytics Reports, `mk_status` to check the connections and the plan, `mk_trial_extend` to extend an ended trial, and `mk_feedback` for notes to the developer. Pick
 the source by the tool name — do not look for a workaround through a neighbouring one.
 
 | Tool | What it is for |
@@ -23,14 +23,16 @@ the source by the tool name — do not look for a workaround through a neighbour
 | `mk_google_ads` | Google Ads: GAQL reports and lists of campaigns, ad groups, ads, conversion actions |
 | `mk_ga4` | Google Analytics 4: events and user behaviour, funnels, users and sessions, realtime, metadata |
 | `mk_search_console` | Google Search Console: organic Google search — queries, pages, clicks, impressions, CTR, position; sitemaps; URL inspection |
+| `mk_google_play` | Google Play Console: the user's own Android apps — installs and uninstalls, estimated sales, earnings after Google's fee, subscription counts, reviews, refunds, Android vitals (crashes, ANR); read-only; reports are 3–7 days late |
 | `mk_appsflyer` | AppsFlyer: installs and in-app events by source, aggregate and raw reports, purchase duplicates between the app and RevenueCat (`purchase_dedup`) |
 | `mk_appsflyer_write` | AppsFlyer: copy of integration settings (only after a confirmation phrase naming the action and the object) |
 | `mk_revenuecat` | RevenueCat: subscriptions — MRR, ARR, active subscriptions and trials, revenue, churn, trial conversion, LTV, refunds, products and offerings, one customer's subscription |
 | `mk_app_store_connect` | App Store Connect: Apple's official data for the user's own apps — downloads, redownloads and updates, proceeds, subscription reports and their events, the App Store funnel (impressions → page views → downloads), sessions, crashes, reviews with replies, versions, PPO experiments; D+1 delay |
 | `mk_app_store_connect_write` | App Store Connect: turning on Analytics Reports (`analytics_enable`; only after a confirmation phrase naming the action and the object) |
 | `mk_apple` | App Store (public data of any app, no key): version and release date, rating, reviews, chart positions by country |
-| `mk_status` | Server status: versions, who is signed in, which sources are authorised, API state |
+| `mk_status` | Server status: versions, who is signed in, which sources are authorised, API state, plan (`plan`) |
 | `mk_feedback` | A note to the V-Kit developer — a bug, something missing, an idea (only after the user says "yes"); a reply to the developer's answer (`action: "reply"`) and what the user already wrote (`action: "list"`, `"get"`) |
+| `mk_trial_extend` | Extending an ended trial by 3 days — once, only after the user's explicit consent naming the action |
 
 Every tool takes `{ mode, args }`: `mode` is the source's mode,
 `args` are its arguments (modes and arguments are in the sections below).
@@ -40,7 +42,7 @@ Every tool takes `{ mode, args }`: `mode` is the source's mode,
 The general rules of behaviour (start with `mk_status`, do not call an unauthorised
 source, never invent numbers, which tool to take when, period and time zone,
 large results as links, writes only after a plan and a confirmation in words, `api.state`, 424 errors
-as they are, keys never in the chat, the feedback invitation and the developer's reply) come from the connector's server in `instructions` when
+as they are, keys never in the chat, the plan and blocking, the feedback invitation and the developer's reply) come from the connector's server in `instructions` when
 it connects, and they change when the server is deployed, without updating the plugin. This file is
 a reference for the sources: modes, fields, caveats. If you do not have the server's rules,
 be careful: `mk_status` first, never invent numbers, never ask for keys in the chat,
@@ -60,6 +62,10 @@ write only after a confirmation phrase that names the action and the object.
 - **Search Console** (`mk_search_console`) — organic Google search before the
   click: which queries find the site, clicks and impressions in the results, CTR,
   average position, pages from search, indexing and sitemaps.
+- **Google Play** (`mk_google_play`) — Google's official numbers for the user's **own** Android apps: installs and
+  uninstalls, estimated sales and earnings after Google's fee (per currency), subscription counts, reviews, refunds
+  (voided purchases), Android vitals (crashes, ANR). Reports are 3–7 days late. Not AppsFlyer (which campaign brought the
+  install) and not RevenueCat (subscription billing across stores): show them side by side and say why they differ.
 - **RevenueCat** (`mk_revenuecat`) — the money of app subscriptions: MRR, ARR,
   active subscriptions and trials, revenue (gross / proceeds), trial conversion,
   churn, refunds, LTV, cohorts, what is going on with one user's subscription.
@@ -80,7 +86,7 @@ write only after a confirmation phrase that names the action and the object.
 Choices that the tool name does not settle: "ads in Instagram" is
 `mk_meta` (breakdown `publisher_platform`), the reach of the account is `mk_instagram`; "traffic from
 search" is `mk_search_console` before the click and `mk_ga4` after it. `mk_fb_pages` and `mk_instagram`
-work through the Meta connection, `mk_search_console` through the Google connection: an
+work through the Meta connection, `mk_search_console` through the Google connection (`mk_google_play` has its own Google sign-in): an
 old connection answers `reauthorize: true` / `missing_scopes` — press
 "Authorize" for that provider once more at https://marketing-kit.app/connections;
 the provider's other sources keep working.
@@ -89,14 +95,14 @@ the provider's other sources keep working.
 
 Call `mk_status` once at the start of the session.
 
-- **Versions.** Compare `server.version` with the version of this skill (`1.18.1`).
+- **Versions.** Compare `server.version` with the version of this skill (`1.20.0`).
   The server is newer — say in one line that the V-Kit plugin updates itself
   (the skill comes with the plugin), and go on without asking again.
 - **First step.** If the `mk_status` answer has `next_step`, say that
   phrase with its link to the user before anything else.
 - **Sources.** `authorized: false` for the source you need — the server's rules: do not call its
   modes, send the user to https://marketing-kit.app/connections (Google — GA4, Google Ads,
-  Search Console; Meta — ads, Pages, Instagram; TikTok; the keys of AppsFlyer,
+  Search Console; Google Play — its own Google sign-in; Meta — ads, Pages, Instagram; TikTok; the keys of AppsFlyer,
   RevenueCat, App Store Connect), and say the source's `note` as it is.
 - **No `mk_*` tools in this chat** (the connector is not connected or is switched off) —
   there is nothing to call, so do not look for workarounds and do not suggest other services
@@ -149,10 +155,13 @@ These are answers, not breakages — read the `message` and act:
   keys below.
 - `revenuecat_key_missing` — the RevenueCat key is not saved: see the section on keys
   below.
+- `google_play_bucket_missing` — the Google Play reports bucket id is not saved: Play Console > Download reports >
+  Copy Cloud Storage URI, pasted on the Google Play card at
+  https://marketing-kit.app/connections#google-play. Nothing finds it automatically.
 - `invalid_args` — fix the arguments by `message` and `mode=fields`, once.
 - `source_error` — the source refused; say `message` and `explanation` as
-  they are, do not replace the numbers. `code: "SERVICE_DISABLED"` for GA4, Google Ads or
-  Search Console — the API is not enabled in the service's Google Cloud project: `message` has
+  they are, do not replace the numbers. `code: "SERVICE_DISABLED"` for GA4, Google Ads,
+  Search Console or Google Play — the API is not enabled in the service's Google Cloud project: `message` has
   the API name and the link to enable it, for the owner; this is the owner's setting,
   not the user's, and reconnecting will not help.
 - `proxy_error` — the server's answer did not arrive (a network page in front of the server instead of
@@ -161,10 +170,10 @@ These are answers, not breakages — read the `message` and act:
 **Step-by-step guides** for every source are on the site, with a link straight to
 the guide window: `https://marketing-kit.app/connections#<source>` —
 `ga4`, `google_ads`, `search_console`, `meta`, `fb_pages`, `instagram`,
-`tiktok`, `appsflyer`, `revenuecat`, `app_store_connect`, `apple`. When the user does not know how to
+`google-play`, `tiktok`, `appsflyer`, `revenuecat`, `app_store_connect`, `apple`. When the user does not know how to
 connect a source or what an error means, give this link.
 
-## Keys: AppsFlyer, RevenueCat, App Store Connect, Google Ads
+## Keys: AppsFlyer, RevenueCat, App Store Connect, Google Ads, Google Play
 
 The user saves them on the page https://marketing-kit.app/connections
 (the server keeps them encrypted):
@@ -184,6 +193,7 @@ The user saves them on the page https://marketing-kit.app/connections
   in the chat. The Admin role covers everything; for reading, Sales and Reports or
   Finance (sales, subscriptions, analytics) and App Manager (apps, reviews,
   versions) are enough; turning on analytics — Admin only.
+- **Google Play** — no key: "Connect Google Play" (its own Google sign-in, read-only) and the reports bucket id (Play Console > Download reports > Copy Cloud Storage URI), both on the Google Play card at https://marketing-kit.app/connections#google-play. Nothing finds the bucket automatically.
 - **Google Ads** — nothing to enter: the server finds the manager account (MCC)
   itself. A login customer ID at https://marketing-kit.app/connections#google_ads
   (section Advanced) is needed only when the account is visible through several MCCs and a specific one is wanted.
@@ -253,6 +263,18 @@ tool itself with `mode=fields`.
 - `report` — Search Analytics — clicks, impressions, CTR and average position for a required period by date/query/page/country/device (search type web, image, video, news, discover, googleNews; filters; up to 50 000 rows, paged by 25 000); totals with impression-weighted position. Arguments: period*, site_url*, dimensions, search_type, filters, aggregation_type, data_state, row_limit, start_row
 - `sitemaps` — submitted sitemaps with errors, warnings, last download and submitted URL counts. Arguments: site_url*, sitemap_index
 - `inspect` — URL Inspection — Google index status of one URL (verdict, coverage, canonical, last crawl). Arguments: site_url*, url*, language_code
+
+### `mk_google_play` — Google Play: modes
+
+- `fields` — reference of modes, report columns, dimensions, metrics, required Play Console permissions and limits. Arguments: no arguments
+- `apps` — apps of the Google Play developer account (package name, title) from the Play Developer Reporting API. Arguments: page_size, page_token
+- `installs` — installs, uninstalls and upgrades by day from the monthly Play Console statistics files, by one dimension (country, device, app version, OS version, carrier, language) plus daily totals; data is 3 to 7 days late. Arguments: package, month, date_from, date_to, dimension
+- `sales` — estimated sales per order from the monthly Play Console report (buyer-currency amounts before Google fees), totals per currency and financial status, never converted. Arguments: package, month, date_from, date_to, product_type
+- `earnings` — the monthly earnings report (charges, Google fees, taxes, refunds per transaction), totals per merchant currency and transaction type, never converted. Arguments: package, month
+- `subscriptions` — new, canceled and active subscription counts per product, base plan, offer and country; counts only, no revenue. Arguments: package, month, date_from, date_to, product_id
+- `reviews` — reviews of the last 7 days from the Google Play Developer API (rating, text, device, developer reply, paging, translation), or a whole month from the reports bucket with month. Arguments: package, max_results, page_token, translation_language, month
+- `refunds` — voided purchases (refunds and chargebacks) of the last 30 days with order id, time, source and reason. Arguments: package, date_from, date_to, max_results, page_token
+- `vitals` — Android vitals from the Play Developer Reporting API — crash and ANR rates by day or hour with dimensions (version, device, country, API level), end clamped to the latest data. Arguments: package, metric_set, aggregation, date_from, date_to, dimensions, metrics, user_cohort, page_size, page_token
 
 ### `mk_appsflyer` — AppsFlyer: modes
 
@@ -573,6 +595,61 @@ Google Cloud project") is a setting of the owner of the service, not of the user
 so plainly; GA4 and Google Ads keep working. A 403 on a property means the account has no
 access to this site in Search Console.
 
+## Source: Google Play (`mk_google_play`)
+
+`mk_google_play` — Google Play Console data of the user's own Android apps, read-only: apps (`apps`), installs
+(`installs`), estimated sales (`sales`), earnings (`earnings`), subscription counts (`subscriptions`), reviews
+(`reviews`), refunds (`refunds`) and Android vitals (`vitals`). It reads Play Console reports with the user's own
+Google sign-in; it never writes anything.
+
+**Sign-in.** Google Play has its own Google sign-in, separate from the one for GA4, Google Ads and Search Console: the user presses "Connect Google Play" at https://marketing-kit.app/connections#google-play and grants read-only access. The source is not authorised (`source_not_authorized`) — send the user there. If the answer has `reauthorize: true` or `missing_scopes` — tell the user to press "Connect Google Play" once more and keep every box ticked. The reports bucket id is a second step on the same card: no sign-in can find it, the user pastes it (answer `google_play_bucket_missing`). Never ask for it in the chat as a secret and never guess it.
+
+**When to use it.** Questions about the Android side of the store: installs and uninstalls, how much was sold,
+what was earned after Google's fee, how many subscribers there are, what reviews say, refunds and chargebacks,
+crash and ANR rates. Do not confuse with the neighbours: AppsFlyer is attribution (which campaign brought the
+install), RevenueCat is subscription billing across stores, `mk_app_store_connect` is the Apple side. Show Google
+Play numbers next to them, say why they differ, never merge. Installs counted by Google Play are not the installs of AppsFlyer
+or Firebase (different definitions, SDK versus store, time zones): give both numbers and say why.
+
+**Order.** First `apps` (package names), then the mode. `package` can be left out only when the account has a
+single app. `installs`, `sales`, `earnings`, `subscriptions` and `reviews` with `month` read monthly files from the
+reports bucket: if the answer is `google_play_bucket_missing`, tell the user to open Play Console > Download
+reports, press "Copy Cloud Storage URI" and paste it into the Google Play card on the connections page.
+
+**Delay.** Report files are monthly with daily rows and are posted 3 to 7 days late; the earnings file comes by the
+5th of the next month. If the user asks about "yesterday" or "today", say the data is not there yet. Dates in the
+files are UTC (sales), Pacific (earnings, vitals daily); say which.
+
+**Modes.**
+- `installs`: `dimension` is one of country (default), device, app_version, os_version, carrier, language; `daily_totals`
+  say in `totals_source` which file they came from. `current_*` and `total_*` are stocks, never add them across days.
+- `sales`: what buyers paid in local currency before fees; not for accounting. Totals are per currency and per
+  financial status. Never convert or add currencies, never net refunds against charges.
+- `earnings`: use it for money after Google's fee. Totals per merchant currency and transaction type.
+- `subscriptions`: counts only (new, canceled, active). `active` is a daily snapshot, never sum it across days. Revenue
+  of subscriptions is in `sales` and `earnings`.
+- `reviews`: the Developer API returns only the last 7 days, text reviews only; use `next_page_token` to page. For an
+  older month pass `month` (reads the bucket file).
+- `refunds`: voided purchases of the last 30 days. No amounts there: look the `order_id` up in `sales`/`earnings`.
+- `vitals`: crash and ANR rates, DAILY (Pacific days) or HOURLY (UTC). Show the values as returned; Google does not
+  say whether they are fractions or percents. `distinct_users` is never summed.
+
+**When it fails.** A 403 means the Google account lacks a Play Console permission: say which one (the message names
+it) and that the Play Console account owner grants it in Users and permissions. Reports: "View app information and
+download bulk reports"; sales and earnings: "View financial data"; reviews: "Reply to reviews"; vitals: "View app
+information (read-only)". `SERVICE_DISABLED` is the service owner's setting, not the user's. A missing month file is
+usually just the delay.
+
+**Recipes.**
+- "How many installs last month, by country?" -> `apps` (get the `package`), then `installs` with `package`, `month: "2026-09"`,
+  `dimension: "country"`; say the data lag and the file the daily totals came from.
+- "How much did we sell and earn in September?" -> `sales` and `earnings` with `month: "2026-09"`; report each currency on its own
+  line, estimated sales (what buyers paid) separately from earnings (after Google's fee), never one total.
+- "What do users write this week?" -> `reviews` (last 7 days, text reviews); for an older month `reviews` with `month`.
+- "Were there refunds lately?" -> `refunds` (last 30 days); the amount of an `order_id` is in `sales` or `earnings` of its month.
+- "Is the latest version crashing?" -> `vitals` with `metric_set: "both"`, `dimensions: ["versionCode"]`; show the values as returned.
+- "How many subscribers do we have?" -> `subscriptions` with `month` (counts only); money from subscriptions is in `sales` and `earnings`.
+
 ## Source: AppsFlyer (`mk_appsflyer`)
 
 - An install = the first launch of the app with the AppsFlyer SDK; users without
@@ -860,6 +937,26 @@ false`. Work like this:
    by yourself, "while at it".
 
 Replies to reviews are not supported yet — reviews are read-only.
+
+## Plan (`plan`, `mk_trial_extend`)
+
+When and how is in the server rules; in short, so as not to drift from them:
+
+- `mk_status.plan.state` — name the state unless it is `active`, `comp`, `trial` or `off` (for example, "the trial
+  ends in 5 days", "the payment failed"; for `gift` add `plan.gift_until`).
+- A source answer `subscription_required` or `payment_paused` — nothing was read. Relay `message` in the user's
+  language with its one link (`subscribe_url` or `update_card_url`); say that V-Kit and the connections should be
+  left as they are — nothing to reinstall or reconnect — and that after paying the next question gets an answer
+  at once. Do not invent or estimate numbers.
+- `extension.available: true` — offer 3 more trial days once per chat. `mk_trial_extend` with `confirm: true` —
+  only after explicit consent to the prolongation itself, in a reply that names the action ("yes, extend my trial"),
+  not a bare "ok"; to a bare "yes" ask once for such a phrase. After `ok: true` repeat the user's question.
+  `extension_unavailable` — the trial was already prolonged or cannot be: say so and give the payment link.
+- A result has `plan_notice` — end the answer with its `ask` in the user's language, on one line; in this chat do
+  not repeat it without a new `plan_notice`. `plan_notice` beats `feedback_invite` (they never come together).
+- "How to pay, cancel, get a refund, where is the invoice" — one line: https://marketing-kit.app/subscribe;
+  https://marketing-kit.app/account (Plan, Billing — invoices and PDF receipts); refund within 60 days — by email to
+  connect@valas.team.
 
 ## Feedback to the developer (`mk_feedback`)
 
