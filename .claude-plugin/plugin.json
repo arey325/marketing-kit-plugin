@@ -1,8 +1,8 @@
 {
   "name": "v-marketing-kit",
   "displayName": "v-marketing-kit",
-  "version": "1.22.2",
-  "description": "V-Kit (v-marketing-kit · Marketing Kit): your ad, app and subscription numbers — Meta Ads, Facebook Pages, Instagram, TikTok Ads, Google Ads, GA4, Search Console, Google Play, AppsFlyer, RevenueCat, App Store Connect and the public App Store — in Claude, for you or for up to three clients.",
+  "version": "1.23.0",
+  "description": "V-Kit (v-marketing-kit · Marketing Kit): your ad, app and subscription numbers — Meta Ads, Facebook Pages, Instagram, TikTok Ads, Apple Ads, Google Ads, GA4, Search Console, Google Play, AppsFlyer, RevenueCat, App Store Connect and the public App Store — in Claude, for you or up to three clients.",
   "author": {
     "name": "VALAS OÜ – podružnica v Sloveniji",
     "url": "https://marketing-kit.app"
@@ -17,6 +17,7 @@
     "analytics",
     "meta-ads",
     "tiktok-ads",
+    "apple-ads",
     "google-ads",
     "ga4",
     "search-console",

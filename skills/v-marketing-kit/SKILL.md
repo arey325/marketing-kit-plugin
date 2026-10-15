@@ -1,16 +1,16 @@
 ---
 name: v-marketing-kit
 description: |-
-  V-Kit (Marketing Kit): ads, analytics and subscriptions through the V-Kit connector — spend, impressions, clicks, installs, events, campaigns, conversions, MRR, subscriptions, revenue, App Store reviews. Use when the question is about marketing numbers, even if the source is not named ("how much did we spend", "how many installs", "what's going on with the campaign", "App Store installs", "Google Play installs", "reviews"). Server: marketing-kit.app. Tools: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_google_play (Google Play), mk_appsflyer (AppsFlyer), mk_appsflyer_write (copy of integration settings), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect), mk_app_store_connect_write (turning on Analytics Reports), mk_apple (App Store, public data), mk_feedback, mk_trial_extend; start with mk_status. Several clients (agencies): name the client in each call.
+  V-Kit (Marketing Kit): ads, analytics and subscriptions through the V-Kit connector — spend, impressions, clicks, installs, events, campaigns, conversions, MRR, subscriptions, revenue, App Store reviews. Use when the question is about marketing numbers, even if the source is not named ("how much did we spend", "how many installs", "what's going on with the campaign", "App Store installs", "Google Play installs", "reviews"). Server: marketing-kit.app. Tools: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_apple_ads (Apple Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_google_play, mk_appsflyer (AppsFlyer), mk_appsflyer_write (integration copy), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect), mk_app_store_connect_write (turning on Analytics Reports), mk_apple (App Store, public data), mk_feedback, mk_trial_extend; start with mk_status. Several clients (agencies): name the client in each call.
 metadata:
-  version: "1.22.2"
+  version: "1.23.0"
   title: v-marketing-kit
 ---
 
 # V-Kit (Marketing Kit)
 
 Ads, analytics and subscriptions through the V-Kit connector (server marketing-kit.app):
-twelve sources, one tool for each, `mk_appsflyer_write` for copying
+thirteen sources, one tool for each, `mk_appsflyer_write` for copying
 integration settings, `mk_app_store_connect_write` for turning on Analytics Reports, `mk_status` to check the connections and the plan, `mk_trial_extend` to extend an ended trial, and `mk_feedback` for notes to the developer. Pick
 the source by the tool name — do not look for a workaround through a neighbouring one.
 
@@ -20,6 +20,7 @@ the source by the tool name — do not look for a workaround through a neighbour
 | `mk_fb_pages` | Facebook Pages: organic page numbers — reach, posts, engagement, followers |
 | `mk_instagram` | Instagram: organic numbers of a professional account — reach, views, followers, posts and reels |
 | `mk_tiktok` | TikTok Ads: ad spend, impressions, clicks, conversions; campaigns, ad groups, ads |
+| `mk_apple_ads` | Apple Ads (App Store search ads): spend, impressions, taps, installs by Apple's attribution; campaigns, ad groups, keywords, negative keywords, ads, search terms, impression share; read-only |
 | `mk_google_ads` | Google Ads: GAQL reports and lists of campaigns, ad groups, ads, conversion actions |
 | `mk_ga4` | Google Analytics 4: events and user behaviour, funnels, users and sessions, realtime, metadata |
 | `mk_search_console` | Google Search Console: organic Google search — queries, pages, clicks, impressions, CTR, position; sitemaps; URL inspection |
@@ -60,6 +61,9 @@ write only after a confirmation phrase that names the action and the object.
 - **TikTok Ads** (`mk_tiktok`) — ad spend, impressions, clicks and
   conversions in TikTok. Organic TikTok (videos, followers) is not covered yet —
   say so, do not substitute ads for it.
+- **Apple Ads** (`mk_apple_ads`) — the App Store search ads of the user's own ad accounts: spend, impressions, taps,
+  installs by Apple's attribution, campaigns, ad groups, keywords and search terms, impression share. Not AppsFlyer
+  (attribution across networks) and not App Store Connect (every store download): show them side by side, never merge.
 - **Search Console** (`mk_search_console`) — organic Google search before the
   click: which queries find the site, clicks and impressions in the results, CTR,
   average position, pages from search, indexing and sitemaps.
@@ -96,14 +100,14 @@ the provider's other sources keep working.
 
 Call `mk_status` once at the start of the session.
 
-- **Versions.** Compare `server.version` with the version of this skill (`1.22.2`).
+- **Versions.** Compare `server.version` with the version of this skill (`1.23.0`).
   The server is newer — say in one line that the V-Kit plugin updates itself
   (the skill comes with the plugin), and go on without asking again.
 - **First step.** If the `mk_status` answer has `next_step`, say that
   phrase with its link to the user before anything else.
 - **Sources.** `authorized: false` for the source you need — the server's rules: do not call its
   modes, send the user to https://marketing-kit.app/connections (Google — GA4, Google Ads,
-  Search Console; Google Play — its own Google sign-in; Meta — ads, Pages, Instagram; TikTok; the keys of AppsFlyer,
+  Search Console; Google Play — its own Google sign-in; Meta — ads, Pages, Instagram; TikTok; Apple Ads; the keys of AppsFlyer,
   RevenueCat, App Store Connect), and say the source's `note` as it is.
 - **No `mk_*` tools in this chat** (the connector is not connected or is switched off) —
   there is nothing to call, so do not look for workarounds and do not suggest other services
@@ -135,7 +139,7 @@ Call `mk_status` once at the start of the session.
 
 An agency or a freelancer can keep up to three **clients** in one V-Kit account: each is a named group of
 connections and keys (one customer's Google, Meta, AppsFlyer and so on). `mk_status` lists them in
-`clients: [{ slug, name, sources }]`; `mk_<source>` and `mk_<source>_write` and `mk_status` take an optional `client` argument next to `mode` (not inside `args`); `mk_apple` has none (public data).
+`clients: [{ slug, name, sources }]`; `mk_<source>` and `mk_<source>_write` and `mk_status` take an optional `client` argument next to `mode` (not inside `args`); `mk_apple` has none (public data); `mk_apple_ads` takes it like every other source.
 
 - **One client** (`mk_status.clients` has one entry — most accounts): never mention clients and never pass `client`.
 - **Several clients:** every data call carries `client` — the slug from `mk_status.clients` (the name works too).
@@ -150,7 +154,7 @@ connections and keys (one customer's Google, Meta, AppsFlyer and so on). `mk_sta
   numbers of different clients; to compare them, show them side by side.
 - Clients are added, renamed and deleted only at https://marketing-kit.app/connections, not in the chat; more than three —
   https://marketing-kit.app/clients/more.
-- To connect another Google, Meta, TikTok or Google Play account for a client, the user presses "Copy link for another
+- To connect another Google, Meta, TikTok, Google Play or Apple Ads account for a client, the user presses "Copy link for another
   browser" on https://marketing-kit.app/connections and opens it where that account is signed in; never ask for the
   account or its password in the chat.
 
@@ -207,7 +211,7 @@ These are answers, not breakages — read the `message` and act:
 **Step-by-step guides** for every source are on the site, with a link straight to
 the guide window: `https://marketing-kit.app/connections#<source>` —
 `ga4`, `google_ads`, `search_console`, `meta`, `fb_pages`, `instagram`,
-`google-play`, `tiktok`, `appsflyer`, `revenuecat`, `app_store_connect`, `apple`. When the user does not know how to
+`google-play`, `tiktok`, `apple-ads`, `appsflyer`, `revenuecat`, `app_store_connect`, `apple`. When the user does not know how to
 connect a source or what an error means, give this link.
 
 ## Keys: AppsFlyer, RevenueCat, App Store Connect, Google Ads, Google Play
@@ -276,6 +280,18 @@ tool itself with `mode=fields`.
 - `accounts` — advertisers authorized for the connection — advertiser_id, name, currency, timezone, status. Arguments: no arguments
 - `report` — ad performance report (spend, impressions, clicks, conversions...) by advertiser/campaign/ad group/ad, optional daily split; long periods are split into 30-day windows automatically. Arguments: period*, advertiser_id*, level, daily, metrics, campaign_ids, adgroup_ids
 - `objects` — campaigns / ad groups / ads of an advertiser — status, objective, budget. Arguments: advertiser_id*, level, status
+
+### `mk_apple_ads` — Apple Ads: modes
+
+- `fields` — reference of report levels, split dimensions, granularity limits and metrics (no network). Arguments: no arguments
+- `accounts` — Apple Ads ad accounts the grant covers — account_id, name, org, roles, currency, time zone, status. Arguments: no arguments
+- `campaigns` — campaigns of an ad account — status, app (promotedObjectId), daily budget, bid strategy, schedule. Arguments: account_id, status, app_id
+- `adgroups` — ad groups of an ad account or campaign — status, pricing model, schedule. Arguments: account_id, campaign_id, status
+- `keywords` — keywords of a campaign or ad group — text, match type, bid, status. Arguments: account_id, campaign_id, adgroup_id, status
+- `negative_keywords` — negative keywords of a campaign (campaign and ad group level) or of an ad group — text, match type, status. Arguments: account_id, campaign_id, adgroup_id
+- `ads` — ads of an ad account, campaign or ad group — creative, status. Arguments: account_id, campaign_id, adgroup_id, status
+- `report` — App Store performance report by campaigns / ad groups / keywords / search terms / ads — spend, impressions, taps, installs, CPT, CPI; total or daily / weekly / monthly, optional split by country, device, age or gender. Arguments: period*, account_id, level, granularity, campaign_id, adgroup_id, group_by, metrics, time_zone
+- `impression_share` — impression share of an app by search term and country — share range, rank, search popularity; daily or weekly. Arguments: period*, account_id, app_id*, granularity, report_type, countries
 
 ### `mk_google_ads` — Google Ads: modes
 
@@ -503,6 +519,71 @@ summing — see the `dropped_metrics` field in the answer.
 **Identifiers.** `campaign_id`, `adgroup_id`, `ad_id` are long numbers given as
 strings: do not turn them into numbers. Budgets in `objects` are in the
 advertiser's currency.
+
+## Source: Apple Ads (`mk_apple_ads`)
+
+`mk_apple_ads` — Apple Ads (the App Store search ads) through the Apple Ads Platform API 1.0, read-only: ad accounts
+(`accounts`), campaigns (`campaigns`), ad groups (`adgroups`), keywords (`keywords`), negative keywords
+(`negative_keywords`), ads (`ads`), performance reports (`report`) and impression share (`impression_share`);
+`fields` lists the report levels, splits, granularity limits and metrics without a network call. It never changes
+campaigns, bids, budgets or keywords. Apple Maps campaigns (business brands) are not covered.
+
+**Sign-in.** The user presses "Connect Apple Ads" at https://marketing-kit.app/connections#apple-ads and signs in with an Apple Account that is an Account Admin or Campaign Group Manager in Apple Ads, picks the ad accounts and read-only access; no keys to make or enter. The source is not authorised (`source_not_authorized`, also after the grant was revoked) — send the user there. `source_not_configured` means the owner of the service has not set Apple Ads up yet — say so and do not try to work around it. A sign-in whose grant has no readable ad account is refused on the site (`apple_ads_no_accounts`): the user signs in again with an account that has an ad account role. Disconnect on the site does not revoke the grant at Apple: that is Apple Ads → Account Settings → API → Manage API Access.
+
+**Where to start.** `accounts` returns the ad accounts the grant covers: `account_id`, name, org, roles, currency and
+time zone. `account_id` may be left out only when the grant covers a single ad account; with several, take it from
+`accounts` — never guess it. The objects go top-down: `campaigns` gives `campaign_id` (and the app — `promotedObjectId`),
+`adgroups` with `campaign_id` gives `adgroup_id`; `keywords` and `negative_keywords` need `campaign_id` or `adgroup_id`.
+Identifiers are long numbers: pass them as they are listed.
+
+**Reports.** `report` with `level` campaigns (the default), adgroups, keywords, searchterms or ads; every level except
+campaigns needs `campaign_id`. `granularity`: TOTAL (the default, one row per object for the period), DAILY (90 days
+or less), WEEKLY (at least 14 days), MONTHLY (at least 90 days). `group_by` is one split, allowed per level (see `fields`):
+countryOrRegion and deviceClass everywhere but ads (countryOrRegion only), also ageRange, gender, adminArea and locality for
+campaigns and ad groups. `metrics` takes Apple's names (`localSpend`, `impressions`, `taps`, `ttr`, `cpt`, `tapInstalls`,
+`viewInstalls`, `totalInstalls`, `totalAvgCPI` and the rest in `fields`); without it — all. `grand_total` is the total
+of the whole period.
+
+**Currency and time zone.** Amounts (`localSpend`, `cpt`, `cpm`, CPI, budgets, bids) are in the ad account's currency
+(`currency` in the answer and in `accounts`). Report dates are in the account's reporting time zone (`time_zone: ORTZ`,
+the default) or in UTC; search terms are ORTZ only, impression share is UTC only — say which. Never add up numbers of
+different ad accounts: show each account on its own line; with different currencies there is no total at all.
+
+**Attribution — Apple's, not AppsFlyer's.** Installs in `report` are Apple Ads attribution: after a tap (`tapInstalls`)
+and after a view (`viewInstalls`; `totalInstalls` is both), new downloads and redownloads counted separately. AppsFlyer
+(`mk_appsflyer`) counts the same campaigns by its own attribution rules and SDK; App Store Connect
+(`mk_app_store_connect`) counts every download of the app in the store, with or without an ad. When the user compares
+them, show both numbers next to each other, say whose number is whose and why they differ; never merge them and never
+"fix" one with the other.
+
+**Impression share.** `impression_share` needs `app_id` — the App Store app id (Adam ID), the `promotedObjectId` of the
+campaigns. Per search term and country it gives a range `lowImpressionShare`…`highImpressionShare` (equal for 1–90%;
+0.91…1 means over 90%), `rank` (1 — the highest share) and `searchPopularity1to5`. DAILY — 30 days or less; WEEKLY —
+Sunday–Saturday weeks, 4 weeks or less, the period starts on a Sunday. Terms with few impressions are hidden by Apple.
+Give the share as a range, not as one number.
+
+**Data keeps arriving.** The last days may still change — do not treat today and yesterday as final.
+
+**When it fails.** 401 — the grant was revoked or has expired and the connection was reset: the user presses "Connect
+Apple Ads" again. 403 — the grant's role does not reach this account or object (the message names the roles): an
+Account Admin checks the access in Apple Ads → Account Settings → API (Manage API Access). 429 — Apple's rate limit:
+wait a minute, then ask for a narrower period or level. `invalid_args` about the granularity, `campaign_id` or
+`group_by` — fix the arguments by the message, once.
+
+**Recipes.**
+- "Spend and installs by campaign last week" -> `accounts` (several — ask which, or show each on its own line), then
+  `report` with `level: "campaigns"`, last week's dates and `granularity: "TOTAL"`; per campaign `localSpend`,
+  `impressions`, `taps`, `tapInstalls` / `totalInstalls`, CPI (`totalAvgCPI`), then `grand_total` — in the account's
+  currency and time zone, named.
+- "Search terms with installs" -> `campaigns` (take `campaign_id`), then `report` with `level: "searchterms"`,
+  `campaign_id` and the period; sort by installs, leave out the rows without installs, and say that Apple hides
+  low-volume terms.
+- "Impression share" -> `campaigns` (the app id is `promotedObjectId`), then `impression_share` with `app_id`, a period
+  of 30 days or less and, if asked, `countries`; per term and country — the range and the rank.
+- "Which keywords spend without installs?" -> `report` with `level: "keywords"` and `campaign_id`; `negative_keywords`
+  for what is already excluded.
+- "Do Apple Ads installs match AppsFlyer?" -> `report` (campaigns, the period) and `mk_appsflyer` for the same days;
+  two columns with the reason they differ, never one merged number.
 
 ## Source: Google Ads (`mk_google_ads`)
 

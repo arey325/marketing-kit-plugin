@@ -4,7 +4,7 @@ Marketing Kit: your ad, app and subscription numbers — in Claude and ChatGPT.
 
 V-Kit (Marketing Kit) lets Claude answer questions about your marketing numbers: ad
 spend, installs, events, campaigns, subscriptions and store reviews. It reads
-Meta Ads, Facebook Pages, Instagram, TikTok Ads, Google Ads, Google Analytics 4,
+Meta Ads, Facebook Pages, Instagram, TikTok Ads, Apple Ads, Google Ads, Google Analytics 4,
 Google Search Console, Google Play (your own apps, read-only), AppsFlyer, RevenueCat, App Store Connect (your own
 apps, with a team key you save on the site) and the public App Store pages. It
 only reads, with two exceptions, each made only after you explicitly confirm
@@ -132,7 +132,8 @@ your disk.
 - Claude sends tool calls to `https://marketing-kit.app/mcp`: from Anthropic's
   servers when you use claude.ai, from your own machine when you use Claude Code.
 - The V-Kit server then calls the APIs of Meta, TikTok, Google (Ads,
-  Analytics, Search Console, Google Play), AppsFlyer, RevenueCat and Apple (App Store Connect
+  Analytics, Search Console, Google Play), AppsFlyer, RevenueCat and Apple (Apple Ads
+  with the access you grant by signing in with Apple, App Store Connect
   with a short-lived token the server signs from your saved key, and the public
   App Store endpoints), on your behalf.
 - The server stores your account, your source tokens and keys (encrypted),
