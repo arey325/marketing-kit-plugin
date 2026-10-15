@@ -11,8 +11,8 @@
     {
       "name": "v-marketing-kit",
       "source": "./",
-      "description": "V-Kit (v-marketing-kit · Marketing Kit): your ad, app and subscription numbers — Meta Ads, Facebook Pages, Instagram, TikTok Ads, Google Ads, GA4, Search Console, Google Play, AppsFlyer, RevenueCat, App Store Connect and the public App Store — in Claude.",
-      "version": "1.21.0"
+      "description": "V-Kit (v-marketing-kit · Marketing Kit): your ad, app and subscription numbers — Meta Ads, Facebook Pages, Instagram, TikTok Ads, Google Ads, GA4, Search Console, Google Play, AppsFlyer, RevenueCat, App Store Connect and the public App Store — in Claude, for you or for up to three clients.",
+      "version": "1.22.0"
     }
   ]
 }

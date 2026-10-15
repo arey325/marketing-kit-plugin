@@ -1,9 +1,9 @@
 ---
 name: v-marketing-kit
 description: |-
-  V-Kit (Marketing Kit): ads, analytics and subscriptions through the V-Kit connector — spend, impressions, clicks, installs, events, campaigns, conversions, MRR, subscriptions, revenue, App Store reviews. Use when the question is about marketing numbers, even if the source is not named ("how much did we spend", "how many installs", "what's going on with the campaign", "App Store installs", "Google Play installs", "reviews"). Server: marketing-kit.app. Tools: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_google_play (Google Play, your own apps), mk_appsflyer (AppsFlyer), mk_appsflyer_write (copy of integration settings), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect, your own apps), mk_app_store_connect_write (turning on Analytics Reports), mk_apple (App Store, public data), mk_feedback (a note to the developer), mk_trial_extend; start with mk_status.
+  V-Kit (Marketing Kit): ads, analytics and subscriptions through the V-Kit connector — spend, impressions, clicks, installs, events, campaigns, conversions, MRR, subscriptions, revenue, App Store reviews. Use when the question is about marketing numbers, even if the source is not named ("how much did we spend", "how many installs", "what's going on with the campaign", "App Store installs", "Google Play installs", "reviews"). Server: marketing-kit.app. Tools: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_google_play (Google Play), mk_appsflyer (AppsFlyer), mk_appsflyer_write (copy of integration settings), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect), mk_app_store_connect_write (turning on Analytics Reports), mk_apple (App Store, public data), mk_feedback, mk_trial_extend; start with mk_status. Several clients (agencies): name the client in each call.
 metadata:
-  version: "1.21.0"
+  version: "1.22.0"
   title: v-marketing-kit
 ---
 
@@ -30,16 +30,17 @@ the source by the tool name — do not look for a workaround through a neighbour
 | `mk_app_store_connect` | App Store Connect: Apple's official data for the user's own apps — downloads, redownloads and updates, proceeds, subscription reports and their events, the App Store funnel (impressions → page views → downloads), sessions, crashes, reviews with replies, versions, PPO experiments; D+1 delay |
 | `mk_app_store_connect_write` | App Store Connect: turning on Analytics Reports (`analytics_enable`; only after a confirmation phrase naming the action and the object) |
 | `mk_apple` | App Store (public data of any app, no key): version and release date, rating, reviews, chart positions by country |
-| `mk_status` | Server status: versions, who is signed in, which sources are authorised, API state, plan (`plan`) |
+| `mk_status` | Server status: versions, who is signed in, the account's clients (`clients`), which sources are authorised, API state, plan (`plan`) |
 | `mk_feedback` | A note to the V-Kit developer — a bug, something missing, an idea (only after the user says "yes"); a reply to the developer's answer (`action: "reply"`) and what the user already wrote (`action: "list"`, `"get"`) |
 | `mk_trial_extend` | Extending an ended trial by 3 days — once, only after the user's explicit consent naming the action |
 
 Every tool takes `{ mode, args }`: `mode` is the source's mode,
-`args` are its arguments (modes and arguments are in the sections below).
+`args` are its arguments (modes and arguments are in the sections below); with several clients on the
+account, also `client` (see "Clients").
 
 ## General rules — from the server
 
-The general rules of behaviour (start with `mk_status`, do not call an unauthorised
+The general rules of behaviour (start with `mk_status`, which client, do not call an unauthorised
 source, never invent numbers, which tool to take when, period and time zone,
 large results as links, writes only after a plan and a confirmation in words, `api.state`, 424 errors
 as they are, keys never in the chat, the plan and blocking, the feedback invitation and the developer's reply) come from the connector's server in `instructions` when
@@ -95,7 +96,7 @@ the provider's other sources keep working.
 
 Call `mk_status` once at the start of the session.
 
-- **Versions.** Compare `server.version` with the version of this skill (`1.21.0`).
+- **Versions.** Compare `server.version` with the version of this skill (`1.22.0`).
   The server is newer — say in one line that the V-Kit plugin updates itself
   (the skill comes with the plugin), and go on without asking again.
 - **First step.** If the `mk_status` answer has `next_step`, say that
@@ -129,6 +130,39 @@ Call `mk_status` once at the start of the session.
   The answer "sign in required" or `source_not_authorized` — send the user to
   https://marketing-kit.app/connections. Never ask for a token, a password or a code
   in the chat.
+
+## Clients (several customers in one account)
+
+An agency or a freelancer can keep up to three **clients** in one V-Kit account: each is a named group of
+connections and keys (one customer's Google, Meta, AppsFlyer and so on). `mk_status` lists them in
+`clients: [{ slug, name, sources }]`; `mk_<source>` and `mk_<source>_write` and `mk_status` take an optional `client` argument next to `mode` (not inside `args`); `mk_apple` has none (public data).
+
+- **One client** (`mk_status.clients` has one entry — most accounts): never mention clients and never pass `client`.
+- **Several clients:** every data call carries `client` — the slug from `mk_status.clients` (the name works too).
+  - The question names a customer ("Acme: spend last week") — pass that client.
+  - It names none and no client was chosen in this chat yet — ask **once**, listing the names, then keep that client
+    for the rest of the chat; the user can switch in words ("now Globex").
+  - A name that is not in the list — show the list, do not guess.
+  - The answer `client_required` (with the list `clients`) — the same: ask which client, do not repeat the call blindly.
+  - `mk_status` without `client` answers `client_required: true` instead of the sources block; with `client` — the
+    sources of that client.
+- **Answers:** with several clients, name the client in the first line of every answer with numbers. Never add up
+  numbers of different clients; to compare them, show them side by side.
+- Clients are added, renamed and deleted only at https://marketing-kit.app/connections, not in the chat; more than three —
+  https://marketing-kit.app/clients/more.
+
+Example — three clients: Main, Acme, Globex.
+
+> **User:** How much did we spend on Meta last week?
+> **Assistant:** Which client — Main, Acme or Globex?
+> **User:** Acme.
+> *(the assistant calls `mk_meta` with `mode: "insights"`, `client: "acme"` and last week's dates)*
+> **Assistant:** **Acme** — Meta Ads, 5–11 October: …
+> **User:** And Globex?
+> *(the same call with `client: "globex"`; the answer starts with **Globex**)*
+
+> **User:** Acme: spend last week.
+> *(no question — the client is named: `mk_meta` with `client: "acme"` straight away)*
 
 ## API versions of the sources (`api`)
 

@@ -11,6 +11,11 @@ only reads, with two exceptions, each made only after you explicitly confirm
 the change: AppsFlyer partner-integration settings copy, and turning on
 App Store Connect Analytics Reports.
 
+Working for several customers? Keep up to three clients — each with its own
+sign-ins and keys — in one V-Kit account and the same plugin, at no extra
+charge, and name the client in the question: “Acme: spend last week”
+(https://marketing-kit.app/for-agencies).
+
 Price: €19.99 a month or €199 a year, VAT included where it applies; 30 days free without a card; cancel any time; refund within 60 days of any charge (Terms, section 7). See https://marketing-kit.app/pricing.
 
 ## Quickest way: a custom connector (no plugin needed)
