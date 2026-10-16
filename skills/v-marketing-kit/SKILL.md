@@ -3,7 +3,7 @@ name: v-marketing-kit
 description: |-
   V-Kit (Marketing Kit): ads, analytics and subscriptions through the V-Kit connector — spend, impressions, clicks, installs, events, campaigns, conversions, MRR, subscriptions, revenue, App Store reviews. Use when the question is about marketing numbers, even if the source is not named ("how much did we spend", "how many installs", "what's going on with the campaign", "App Store installs", "Google Play installs", "reviews"). Server: marketing-kit.app. Tools: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_apple_ads (Apple Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_google_play, mk_appsflyer (AppsFlyer), mk_appsflyer_write (integration copy), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect), mk_app_store_connect_write (turning on Analytics Reports), mk_apple (App Store, public data), mk_feedback, mk_trial_extend; start with mk_status. Several clients (agencies): name the client in each call.
 metadata:
-  version: "1.23.7"
+  version: "1.23.8"
   title: v-marketing-kit
 ---
 
@@ -100,7 +100,7 @@ the provider's other sources keep working.
 
 Call `mk_status` once at the start of the session.
 
-- **Versions.** Compare `server.version` with the version of this skill (`1.23.7`).
+- **Versions.** Compare `server.version` with the version of this skill (`1.23.8`).
   The server is newer — say in one line that the V-Kit plugin updates itself
   (the skill comes with the plugin), and go on without asking again.
 - **First step.** If the `mk_status` answer has `next_step`, say that
