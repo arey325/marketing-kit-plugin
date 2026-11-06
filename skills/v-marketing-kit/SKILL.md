@@ -3,7 +3,7 @@ name: v-marketing-kit
 description: |-
   V-Kit (Marketing Kit): ads, analytics and subscriptions through the V-Kit connector — spend, impressions, clicks, installs, events, campaigns, conversions, MRR, subscriptions, revenue, App Store reviews. Use when the question is about marketing numbers, even if the source is not named ("how much did we spend", "how many installs", "what's going on with the campaign", "App Store installs", "Google Play installs", "reviews"). Server: marketing-kit.app. Tools: mk_meta (Meta Ads), mk_fb_pages (Facebook Pages), mk_instagram (Instagram), mk_tiktok (TikTok Ads), mk_apple_ads (Apple Ads), mk_google_ads (Google Ads), mk_ga4 (GA4), mk_search_console (Search Console), mk_google_play, mk_appsflyer (AppsFlyer), mk_appsflyer_write (integration copy), mk_revenuecat (RevenueCat), mk_app_store_connect (App Store Connect), mk_app_store_connect_write (turning on Analytics Reports), mk_apple (App Store, public data), mk_feedback, mk_trial_extend; start with mk_status. Several clients (agencies): name the client in each call.
 metadata:
-  version: "1.23.15"
+  version: "1.24.1"
   title: v-marketing-kit
 ---
 
@@ -17,7 +17,7 @@ the source by the tool name — do not look for a workaround through a neighbour
 | Tool | What it is for |
 |---|---|
 | `mk_meta` | Meta Ads (paid ads in Facebook and Instagram): spend, impressions, clicks, installs as Meta counts them, campaigns/ad sets/ads, event counters, custom conversions |
-| `mk_fb_pages` | Facebook Pages: organic page numbers — reach, posts, engagement, followers |
+| `mk_fb_pages` | Facebook Pages: organic page numbers — reach, posts, engagement, followers, comments under posts |
 | `mk_instagram` | Instagram: organic numbers of a professional account — reach, views, followers, posts and reels |
 | `mk_tiktok` | TikTok Ads: ad spend, impressions, clicks, conversions; campaigns, ad groups, ads |
 | `mk_apple_ads` | Apple Ads (App Store search ads): spend, impressions, taps, installs by Apple's attribution; campaigns, ad groups, keywords, negative keywords, ads, search terms, impression share; read-only |
@@ -55,7 +55,7 @@ write only after a confirmation phrase that names the action and the object.
 - **Meta Ads** (`mk_meta`) — paid ads in Facebook and Instagram: spend,
   CPI, campaigns, ad sets, ads.
 - **Facebook Pages** (`mk_fb_pages`) — organic page numbers: reach, posts,
-  engagement, followers.
+  engagement, followers; comments under posts.
 - **Instagram** (`mk_instagram`) — organic numbers of a professional account:
   reach, views, followers, posts and reels.
 - **TikTok Ads** (`mk_tiktok`) — ad spend, impressions, clicks and
@@ -100,7 +100,7 @@ the provider's other sources keep working.
 
 Call `mk_status` once at the start of the session.
 
-- **Versions.** This skill is version `1.23.15`. About versions and updates say only what
+- **Versions.** This skill is version `1.24.1`. About versions and updates say only what
   `client_update.note` of `mk_status` says, once per chat; never compare `server.version` yourself.
 - **First step.** If the `mk_status` answer has `next_step`, say that
   phrase with its link to the user before anything else.
@@ -156,6 +156,12 @@ connections and keys (one customer's Google, Meta, AppsFlyer and so on). `mk_sta
 - To connect another Google, Meta, TikTok, Google Play or Apple Ads account for a client, the user presses "Copy link for another
   browser" on https://marketing-kit.app/connections and opens it where that account is signed in; never ask for the
   account or its password in the chat.
+- **Business portfolio:** a client can be linked to one Meta Business portfolio (`mk_status.clients[].meta_business:
+  { id, name }`, otherwise `null`). Then `mk_meta`, `mk_fb_pages` and `mk_instagram` of that client see only that
+  portfolio's ad accounts, Pages and Instagram accounts; `mode=accounts` lists them and names the portfolio in
+  `business`. An id outside the portfolio is refused with `asset_outside_portfolio` and nothing is read — say so, show
+  the list from `mode=accounts` or suggest unlinking on https://marketing-kit.app/connections. `portfolio_unavailable`
+  (424): this Meta account can no longer read the portfolio — relink or unlink it there. Linking is done only on the site.
 
 Example — three clients: Main, Acme, Globex.
 
@@ -263,6 +269,7 @@ tool itself with `mode=fields`.
 - `accounts` — Facebook Pages the user manages — id, name, category, followers, tasks (page tokens are never returned). Arguments: no arguments
 - `page_insights` — page metrics per day for a period (reach, content views, engagements, followers); periods over 90 days are split. Arguments: period*, page_id*, metrics, metric_period
 - `posts` — published posts of a page for a period with reaction, comment and share counts. Arguments: period*, page_id*, limit
+- `comments` — comments under one post of a Page — text, time, like and reply counts; the commenter is not returned (pages_read_user_content). Arguments: page_id*, post_id*, limit
 - `post_insights` — insights for 1–25 posts of a page (reach, content views, clicks, reactions by type). Arguments: page_id*, post_ids*, metrics
 
 ### `mk_instagram` — Instagram: modes
@@ -412,6 +419,14 @@ in the last days on iOS is not an anomaly by itself.
 units of the ad account's currency (for example, cents for USD); the answer marks this
 with `budget_unit: "minor"`.
 
+**Business portfolio.** If this client is linked to a Meta Business portfolio
+(`mk_status.clients[].meta_business`), `accounts` lists only that portfolio's ad
+accounts and names it in `business`, and the default ad account is picked inside it.
+An `act_id` outside the portfolio is refused with `asset_outside_portfolio` and
+nothing is read — show the list from `accounts` or suggest unlinking on
+marketing-kit.app/connections. `portfolio_unavailable` — this Meta account can no
+longer read the portfolio: relink or unlink it there.
+
 More detail and ready-made checks for discrepancies — `references/meta.md`.
 
 Source reference: `references/meta.md`.
@@ -420,7 +435,8 @@ Source reference: `references/meta.md`.
 
 `mk_fb_pages` — Facebook Pages (Meta Graph API), read-only: the user's pages
 (`accounts`), posts (`posts`), page insights
-(`page_insights`) and post insights (`post_insights`). Sign-in is the same Meta authorisation
+(`page_insights`), post insights (`post_insights`) and the comments under a post
+(`comments`). Sign-in is the same Meta authorisation
 as for ads; it needs the permissions `pages_show_list`, `pages_read_engagement`,
 `read_insights`, and on the page the user needs the "Analyze" task. If the answer
 contains `reauthorize: true` — ask the user to re-authorise Meta at
@@ -430,6 +446,18 @@ marketing-kit.app/connections (tick all the boxes in the Facebook dialog).
 
 **Order.** First `accounts` — it has the page `id`; `page_id` is required in
 all the other modes. Page tokens are not shown in the answers and are not needed.
+
+**Business portfolio.** If this client is linked to a Meta Business portfolio
+(`mk_status.clients[].meta_business`), `accounts` lists only that portfolio's Pages
+and names it in `business`. A `page_id` or post outside the portfolio is refused
+with `asset_outside_portfolio` and nothing is read — show the list from `accounts`
+or suggest unlinking on marketing-kit.app/connections. `portfolio_unavailable` —
+this Meta account can no longer read the portfolio: relink or unlink it there.
+
+**Comments.** `comments` reads the comments under one post (`post_id` from `posts`,
+`page_id` required): text, time, likes, reply count; the commenter is never
+returned — do not ask for it. Needs `pages_read_user_content`; without it the
+answer says so with `reauthorize: true`.
 
 **Reach and views.** `page_total_media_view_unique` is reach (unique
 people), `page_media_view` is content views. Meta removed the old `page_impressions*`,
@@ -464,6 +492,14 @@ marketing-kit.app/connections (tick all the boxes in the Facebook dialog).
 **Order.** First `accounts` — it has `ig_user_id`; it is required in
 `account_insights` and `media`, and the `media_ids` for `media_insights` are taken from
 `media`.
+
+**Business portfolio.** If this client is linked to a Meta Business portfolio
+(`mk_status.clients[].meta_business`), `accounts` lists only that portfolio's
+Instagram accounts and names it in `business`. An `ig_user_id` or media outside the
+portfolio is refused with `asset_outside_portfolio` and nothing is read — show the
+list from `accounts` or suggest unlinking on marketing-kit.app/connections.
+`portfolio_unavailable` — this Meta account can no longer read the portfolio: relink
+or unlink it there.
 
 **Metrics.** Instagram removed `impressions` — use `views` (views)
 and `reach` (reach, unique accounts). `profile_views` and `website_clicks`
